@@ -1,6 +1,6 @@
 import logo from  "../../public/logo.png"
 import Link from "next/link"
-import Setting from "./setting"
+import Setting from "./Setting"
 import Image from "next/image"
 import { useState } from "react"
 
