@@ -15,6 +15,11 @@ const config = {
         port: '',
         pathname: '*',
       },
+      {
+        protocol: 'https',
+        hostname: 'yt3.googleusercontent.com',
+
+      },
     ],
   },
 
