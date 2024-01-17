@@ -25,8 +25,9 @@ export const profileRouter = createTRPCRouter({
                 throw new TRPCError({ code: "UNAUTHORIZED" })
             }
             const username = await clerkClient.users.getUser(ctx.userId)
+                
             return {
-                username: username.username
+                username: username.firstName
             }
 
 

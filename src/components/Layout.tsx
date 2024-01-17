@@ -7,7 +7,7 @@ interface Props {
 const Layout = ({children}: Props) => {
   return (
     <>
-       <div className="flex flex-col flex-grow p-3">
+       <div className="flex flex-col flex-grow p-3" >
         {children}
        </div>
     </>
