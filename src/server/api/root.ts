@@ -2,7 +2,7 @@ import { postRouter } from "~/server/api/routers/post";
 import { createTRPCRouter } from "~/server/api/trpc";
 import { profileRouter } from "./routers/profile";
 import { pusherRouter } from "./routers/pusher";
-
+import { openaiRouter } from "./routers/openAI";
 /**
  * This is the primary router for your server.
  *
@@ -11,7 +11,8 @@ import { pusherRouter } from "./routers/pusher";
 export const appRouter = createTRPCRouter({
   post: postRouter,
   profile : profileRouter,
-  pusher : pusherRouter
+  pusher : pusherRouter,
+  openAI : openaiRouter
 });
 
 // export type definition of API

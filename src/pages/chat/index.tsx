@@ -3,28 +3,39 @@ import Link from 'next/link'
 import Pusher from "pusher-js"
 import { ChatBox } from '~/components/ChatBox'
 import { v4 as uuidv4 } from "uuid"
+
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 import { api } from '~/utils/api'
 import { Textarea, IconButton } from "@material-tailwind/react";
 import { useState, useEffect } from 'react'
+
 const Chat = () => {
   const [chats, setChats] = useState([]);
   const [text, setText] = useState("");
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => { setOpen(!open) };
 
+  let a: never[] = []        
 
+  chats.forEach((l) => {
+    a.push(l)
+  })
   const handletext = (e: any) => {
     setText(e.target.value);
   };
 
+  const summarizer=  api.openAI.summarizer.useMutation()
 
-  const { mutate,data } = api.pusher.message.useMutation()
-  const handleSend = (e: { preventDefault: () => void }) => {
-    e.preventDefault()
+  const { mutate, data } = api.pusher.message.useMutation()
 
-  }
 
-  console.log("key " + process.env.PUSHER_KEY)
-
-  useEffect( () => {
+  useEffect(() => {
     console.log(process.env.NEXT_PUBLIC_PUSHER_KEY)
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
@@ -43,7 +54,11 @@ const Chat = () => {
     };
   }, []);
 
+  const handleSummarize = () => {
+    handleOpen();
+     const res =  summarizer.mutate({texts : a});
 
+  }
 
 
   return (
@@ -67,11 +82,11 @@ const Chat = () => {
           </div>
         </div>
         <div className="flex flex-grow justify-between flex-col ">
-          <div className='h-5/6 w-5/5 px-6 pt-2' style={{ height: "90%",overflowY : "scroll" }}>
+          <div className='h-5/6 w-5/5 px-6 pt-2' style={{ height: "90%", overflowY: "scroll" }}>
             <div className="flex flex-col gap-2">
 
               {chats.map((chat) => {
-                  console.log(chat)
+
                 return (
                   <div className="flex-1 rounded-lg p-2 bg-gray-50" key={uuidv4()}>
                     <p className="text-sm font-bold">{data?.username}</p>
@@ -85,20 +100,10 @@ const Chat = () => {
           <div className='h-1/6 w-5/5' style={{ height: "9%" }}>
             <div className="flex w-full flex-row items-center gap-2 rounded-[99px] border border-gray-900/10 bg-gray-900/5 p-2">
               <div className="flex">
-                <IconButton placeholder={"fr"} variant="text" className="rounded-full">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="h-5 w-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-                    />
+                <IconButton placeholder={"fr"} onClick={()=>{handleSummarize() } 
+                   } variant="text" className="rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
                   </svg>
                 </IconButton>
                 <IconButton placeholder={"fr"} variant="text" className="rounded-full">
@@ -119,7 +124,6 @@ const Chat = () => {
                 </IconButton>
               </div>
               <Textarea
-
                 onChange={handletext}
                 value={text}
                 rows={1}
@@ -153,6 +157,24 @@ const Chat = () => {
                     />
                   </svg>
                 </IconButton>
+                <Dialog placeholder={"rf"} open={open} handler={handleOpen}>
+                  <DialogHeader placeholder={"rf"}>Summary</DialogHeader>
+                  <DialogBody placeholder={"rf"}>
+{!summarizer.isLoading?summarizer.data:"...Loading"}
+                  </DialogBody>
+                  <DialogFooter placeholder={"rf"}>
+                    <Button
+                      placeholder={"rf"}
+                      variant="text"
+                      color="red"
+                      onClick={handleOpen}
+                      className="mr-1"
+                    >
+                      <span>Cancel</span>
+                    </Button>
+                    
+                  </DialogFooter>
+                </Dialog>
               </div>
             </div>
           </div>
