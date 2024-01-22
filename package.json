@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^4.29.3",
+    "@cord-sdk/react": "^1.31.0",
+    "@cord-sdk/server": "^1.31.0",
     "@langchain/openai": "^0.0.12",
     "@material-tailwind/react": "^2.1.8",
     "@prisma/client": "^5.6.0",
@@ -24,6 +26,7 @@
     "@trpc/react-query": "^10.43.6",
     "@trpc/server": "^10.43.6",
     "@types/uuid": "^9.0.7",
+    "axios": "^1.6.5",
     "next": "^14.0.4",
     "prettier": "^3.2.2",
     "prettier-plugin-tailwindcss": "^0.5.11",
