@@ -4,6 +4,11 @@ import Layout from '~/components/Layout'
 const index = () => {
   return (
    <>
+     <style jsx global>{`
+      .sidebar-2 {
+         display: none ;
+           }
+        `}</style>
    <Layout>
    <iframe
   src="https://codesandbox.io/embed/db9kf?view=Editor+%2B+Preview"

@@ -45,14 +45,18 @@ type CreateContextOptions = Record<string, never>;
  *
  * @see https://trpc.io/docs/context
  */
+
 export const createTRPCContext = (opts: CreateNextContextOptions) => {
-  const {req} =  opts
-  const {userId} = getAuth(req)
+  const { req } = opts;
+  const authResult = getAuth(req);
+  const userId = authResult.userId || '';
   return {
     db,
     userId
-  }
+  };
 };
+
+
 
 /**
  * 2. INITIALIZATION

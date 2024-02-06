@@ -20,6 +20,10 @@ const config = {
         hostname: 'yt3.googleusercontent.com',
 
       },
+      {
+        protocol : 'https',
+        hostname : 'img.clerk.com'
+      }
     ],
   },
 

@@ -34,11 +34,6 @@ const Chat = () => {
                     <span className="mx-2 text-xs font-medium">General</span>
                 </Link>
 
-
-
-             
-
-
                 <Collapse open={open}>
                     <Card placeholder={"fr"} className="my-4 mx-auto w-8/12">
                         <CardBody placeholder={"fr"}>
@@ -49,7 +44,6 @@ const Chat = () => {
                         </CardBody>
                     </Card>
                 </Collapse>
-
 
             </div>
         </>

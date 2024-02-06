@@ -13,11 +13,11 @@ export const profileRouter = createTRPCRouter({
             };
         }),
 
-    getLatest: publicProcedure.query(({ ctx }) => {
-        return ctx.db.post.findFirst({
-            orderBy: { createdAt: "desc" },
-        });
-    }),
+    // getLatest: publicProcedure.query(({ ctx }) => {
+    //     return ctx.db.post.findFirst({
+    //         orderBy: { createdAt: "desc" },
+    //     });
+    // }),
 
     username: publicProcedure
         .query(async ({ ctx }) => {
@@ -32,5 +32,17 @@ export const profileRouter = createTRPCRouter({
 
 
 
-        })
+        }),
+
+
+    ProfilePicture: publicProcedure
+    .query(async({ctx})=>{
+        if (!ctx.userId) {
+            throw new TRPCError({ code: "UNAUTHORIZED" })
+        }
+        const profilePicture = await clerkClient.users.getUser(ctx.userId)
+        return {
+            profilePicture: profilePicture.imageUrl
+        }
+    })
 });

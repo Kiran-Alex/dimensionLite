@@ -2,6 +2,7 @@ import Link from "next/link"
 const Setting = () => {
   return (
     <>
+    
       <div className="space-y-1 px-1">
         <label className="px-2  text-sm ">Settings</label>
 

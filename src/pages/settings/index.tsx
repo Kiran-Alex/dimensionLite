@@ -1,6 +1,9 @@
 import Layout from "~/components/Layout"
 import Image from "next/image"
+import { api } from "~/utils/api"
 const index = () => {
+
+    const profilepic = api.profile.ProfilePicture.useQuery()
     return (
         <Layout>
             <div className="h-8 w-full flex flex-row items-center">
@@ -35,7 +38,12 @@ const index = () => {
                     <div className="h-fit w-5/5"><h1 className="text-gray-500 text-xl font-bold">Profile</h1></div>
                     <div className="flex-grow h-4/5">
                         <div className="w-5/5 flex flex-row justify-center mt-6">
-                            <Image className="object-cover w-48 h-48 rounded-full" width={170} height={12} src="https://yt3.googleusercontent.com/-CFTJHU7fEWb7BYEb6Jh9gm1EpetvVGQqtof0Rbh-VQRIznYYKJxCaqv_9HeBcmJmIsp2vOO9JU=s900-c-k-c0x00ffffff-no-rj" alt="" />
+                            {profilepic.isFetched&& profilepic.data?.profilePicture!== undefined && <Image className="object-cover w-48 h-48 rounded-full" width={170} height={12} src={profilepic.data?.profilePicture} alt="" />}
+                            {profilepic.isLoading && <div className="animate-pulse w-48 h-48 rounded-full bg-gray-300" ></div> }
+                            
+                          
+                           
+
 
 
                         </div>

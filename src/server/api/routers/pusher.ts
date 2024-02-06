@@ -11,6 +11,7 @@ export const pusherRouter = createTRPCRouter({
     message: publicProcedure
         .input(z.object({ message: z.string() }))
         .mutation(async({ input, ctx }) => {
+            try{
             pusher.trigger("chat", "message", input.message);
             if (ctx.userId) {
               const uname =  await clerkClient.users.getUser(ctx.userId)
@@ -21,7 +22,9 @@ export const pusherRouter = createTRPCRouter({
             }
             else {
                 throw new TRPCError({code : "UNAUTHORIZED"})
-            }
-            
+            }}
+           catch(err) {
+            throw new TRPCError({code : "UNAUTHORIZED"})
+           } 
         }),
 });

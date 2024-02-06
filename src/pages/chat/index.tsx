@@ -23,38 +23,38 @@ const Chat = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => { setOpen(!open) };
 
-  let a: never[] = []
+const  a: never[] = []
 
   chats.forEach((l) => {
     a.push(l)
   })
-  const handletext = (e: any) => {
-    setText(e.target.value);
-  };
+  // const handletext = (e: any) => {
+  //   setText(e.target.value);
+  // };
 
   const summarizer = api.openAI.summarizer.useMutation()
 
-  const { mutate, data } = api.pusher.message.useMutation()
+  // const { mutate, data } = api.pusher.message.useMutation()
 
 
-  useEffect(() => {
-    console.log(process.env.NEXT_PUBLIC_PUSHER_KEY)
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-    });
+  // useEffect(() => {
+  //   console.log(process.env.NEXT_PUBLIC_PUSHER_KEY)
+  //   const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+  //     cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+  //   });
 
-    const channel = pusher.subscribe("chat");
+  //   const channel = pusher.subscribe("chat");
 
-    channel.bind("message", (data: any) => {
-      setChats((prevChats): any => {
-        return [...prevChats, data];
-      });
-    });
+  //   channel.bind("message", (data: any) => {
+  //     setChats((prevChats): any => {
+  //       return [...prevChats, data];
+  //     });
+  //   });
 
-    return () => {
-      pusher.unsubscribe("chat");
-    };
-  }, []);
+  //   return () => {
+  //     pusher.unsubscribe("chat");
+  //   };
+  // }, []);
 
   const handleSummarize = () => {
     handleOpen();
