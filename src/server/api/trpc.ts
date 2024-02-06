@@ -49,7 +49,7 @@ type CreateContextOptions = Record<string, never>;
 export const createTRPCContext = (opts: CreateNextContextOptions) => {
   const { req } = opts;
   const authResult = getAuth(req);
-  const userId = authResult.userId || '';
+  const userId = authResult.userId ?? '';
   return {
     db,
     userId

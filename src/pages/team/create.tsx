@@ -4,6 +4,7 @@ import { api } from "~/utils/api";
 import { Select, Option } from "@material-tailwind/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { SetStateAction } from "react";
 
 type usershape = {
     name: string,
@@ -34,7 +35,8 @@ const Create: React.FC = () => {
                     if (result.status >= 200 && result.status <= 209) {
 
 
-                        setUsers(result.data.users)
+                        setUsers(result.data.users as SetStateAction<usershape[]>);
+
                         // console.log(result.data.users)
 
                     }

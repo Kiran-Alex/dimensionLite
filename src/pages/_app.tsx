@@ -15,13 +15,14 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       try {
         const server = 'http://localhost:3000';
         const response = await fetch(`${server}/api/generate-cord-token`);
-        const data:{clientAuthToken : string} = await response.json();
+        const data= await response.json() as {clientAuthToken : string} ;
         console.log('data', data);
         setCordToken(data.clientAuthToken);
       } catch (error) {
         console.log('Something went wrong!: ', error);
       }
     };
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fetchData();
   }, [setCordToken]);
   

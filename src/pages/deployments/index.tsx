@@ -1,9 +1,17 @@
 import Layout from "~/components/Layout"
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { api } from "~/utils/api"
 import { v4 as uuidv4 } from "uuid";
 import Link from "next/link";
 import { useEffect, useState } from "react"
+
+interface resultshape extends AxiosResponse {
+  status : number,
+  data : {
+    user : {username : string},
+    projects : dataShape
+  }
+}
 
 type dataShape = {
   map(arg0: (dat: dataShape) => import("react").JSX.Element): import("react").ReactNode | Iterable<import("react").ReactNode>;
@@ -20,13 +28,12 @@ const Index = () => {
         const Token = Verceltoken.data?.vercelAuthToken
         const res = async () => {
           try {
-            const result = await axios.get('https://api.vercel.com/v9/projects', {
+            const result:resultshape = await axios.get('https://api.vercel.com/v9/projects', {
               headers: {
                 Authorization: `Bearer ${Token}`
               }
             })
             if (result.status >= 200 && result.status <= 209) {
-              console.log(result.data.projects)
               setData(result.data.projects)
             }
 
@@ -35,11 +42,12 @@ const Index = () => {
             console.log(err)
           }
         }
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         res()
 
         const getUsername = async () => {
           try {
-            const response = await axios.get("https://api.vercel.com/v2/user", {
+            const response:resultshape = await axios.get("https://api.vercel.com/v2/user", {
               headers: {
                 Authorization: `Bearer ${Token}`
               }
@@ -52,6 +60,7 @@ const Index = () => {
             console.log(err)
           }
         }
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         getUsername()
       }
       catch (err) {
