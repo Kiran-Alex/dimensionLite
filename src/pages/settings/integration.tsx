@@ -50,6 +50,7 @@ const Integration = () => {
                     console.log(err)
                 }
             }
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             VercelCheck()
         }
         catch (err) {
@@ -95,7 +96,8 @@ const Integration = () => {
                     <Dialog placeholder={"fr"} open={open} handler={handleOpen}>
                         <DialogHeader placeholder={"fr"}>Vercel Integration</DialogHeader>
                         <DialogBody placeholder={"fr"}>
-                            <Input label="enter access token" onChange={(e) => { e.preventDefault; setToken(e.target.value) }} crossOrigin={"fr"} />
+                            
+                            <Input label="enter access token" onChange={(e) => { e.preventDefault(); setToken(e.target.value) }} crossOrigin={"fr"} />
                             <span className="text-xs mt-6 text-gray-600">You can Find It <a className="text-black underline" target="_blank" href="https://vercel.com/account/tokens">here</a> </span>
                         </DialogBody>
                         <DialogFooter placeholder={"fr"}>

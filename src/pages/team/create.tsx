@@ -5,11 +5,27 @@ import { Select, Option } from "@material-tailwind/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { SetStateAction } from "react";
+import { AxiosResponse } from "axios";
 
 type usershape = {
     name: string,
     id: string
 }
+
+
+
+interface resultshape extends AxiosResponse {
+    status: number,
+    data: {
+        user: { username: string },
+        users: usershape[]
+    }
+}
+
+//   type dataShape = {
+//     map(arg0: (dat: dataShape) => import("react").JSX.Element): import("react").ReactNode | Iterable<import("react").ReactNode>;
+//     length: number; name: string, id: string, latestDeployments: Array<{ alias: Array<string>, readyState: string | Array<string> }> 
+//   };
 
 const Create: React.FC = () => {
     const router = useRouter();
@@ -20,14 +36,12 @@ const Create: React.FC = () => {
 
 
 
-
-
     useEffect(() => {
         const res = async () => {
 
             try {
                 if (isFetched == true) {
-                    const result = await axios.get('https://api.cord.com/v1/users', {
+                    const result: resultshape = await axios.get('https://api.cord.com/v1/users', {
                         headers: {
                             Authorization: `Bearer ${data?.token}`
                         }
@@ -35,7 +49,7 @@ const Create: React.FC = () => {
                     if (result.status >= 200 && result.status <= 209) {
 
 
-                        setUsers(result.data.users as SetStateAction<usershape[]>);
+                        setUsers(result.data.users);
 
                         // console.log(result.data.users)
 
