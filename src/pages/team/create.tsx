@@ -60,7 +60,7 @@ const Create: React.FC = () => {
                 console.log(err)
             }
         }
-
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         res()
     }, [isFetched])
 
