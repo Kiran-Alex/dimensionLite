@@ -1,27 +1,27 @@
 import Layout from '~/components/Layout'
 import Link from 'next/link'
-import Pusher from "pusher-js"
-import { ChatBox } from '~/components/ChatBox'
-import { v4 as uuidv4 } from "uuid"
+// import Pusher from "pusher-js"
+// import { ChatBox } from '~/components/ChatBox'
+// import { v4 as uuidv4 } from "uuid"
 import { PagePresence } from '@cord-sdk/react';
-import {
-  Button,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-} from "@material-tailwind/react";
+// import {
+//   Button,
+//   Dialog,
+//   DialogHeader,
+//   DialogBody,
+//   DialogFooter,
+// } from "@material-tailwind/react";
 import { api } from '~/utils/api'
-import { Textarea, IconButton } from "@material-tailwind/react";
+// import { Textarea, IconButton } from "@material-tailwind/react";
 import { useState, useEffect } from 'react'
 import { Thread } from '@cord-sdk/react';
-import axios from 'axios'
+// import axios from 'axios'
 
 const Chat = () => {
   const [chats, setChats] = useState([]);
-  const [text, setText] = useState("");
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => { setOpen(!open) };
+  // const [text, setText] = useState("");
+  // const [open, setOpen] = useState(false);
+  // const handleOpen = () => { setOpen(!open) };
 
 const  a: never[] = []
 
@@ -32,7 +32,7 @@ const  a: never[] = []
   //   setText(e.target.value);
   // };
 
-  const summarizer = api.openAI.summarizer.useMutation()
+  // const summarizer = api.openAI.summarizer.useMutation()
 
   // const { mutate, data } = api.pusher.message.useMutation()
 
@@ -56,74 +56,74 @@ const  a: never[] = []
   //   };
   // }, []);
 
-  const handleSummarize = () => {
-    handleOpen();
-    const res = summarizer.mutate({ texts: a });
+  // const handleSummarize = () => {
+  //   handleOpen();
+  //   const res = summarizer.mutate({ texts: a });
 
-  }
+  // }
 
-  const createUser = async () => {
-    const res = await axios.put("https://api.cord.com/v1/users/cordymccordface",{
-      "name": "kiran alex",
-    }, {
-      headers: {
-        Authorization: "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI0NWQ4YjdjMi1hMzI0LTRjNmItODdmNS1hOGRkYzVlNDFkNTMiLCJpYXQiOjE3MDU4MzE1NjMsImV4cCI6MTcwNTgzODc2M30.yHJJZuiSnukaUP2oKWBEN-bJNACjAse2EeXslc-SrnghE0aM9PMlrw4_7osahtczyHVphnB6pXfx4rm3FvUEIw"
-      }
-    })
-    try {
-      if (res.status <= 200 && res.status<=209) {
-        console.log("user created ")
-      }
-      else {
-        console.log(res.data)
-      }
-    }
-    catch (err) {
-      console.log(err)
-    }
-  }
+  // const createUser = async () => {
+  //   const res = await axios.put("https://api.cord.com/v1/users/cordymccordface",{
+  //     "name": "kiran alex",
+  //   }, {
+  //     headers: {
+  //       Authorization: "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI0NWQ4YjdjMi1hMzI0LTRjNmItODdmNS1hOGRkYzVlNDFkNTMiLCJpYXQiOjE3MDU4MzE1NjMsImV4cCI6MTcwNTgzODc2M30.yHJJZuiSnukaUP2oKWBEN-bJNACjAse2EeXslc-SrnghE0aM9PMlrw4_7osahtczyHVphnB6pXfx4rm3FvUEIw"
+  //     }
+  //   })
+  //   try {
+  //     if (res.status <= 200 && res.status<=209) {
+  //       console.log("user created ")
+  //     }
+  //     else {
+  //       console.log(res.data)
+  //     }
+  //   }
+  //   catch (err) {
+  //     console.log(err)
+  //   }
+  // }
 
-  const createGroup = async () => {
-    const res = await axios.put("https://api.cord.com/v1/groups/my-first-group",{
-      name : "my-first-group",
-    }, {
-      headers: {
-        Authorization: "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI0NWQ4YjdjMi1hMzI0LTRjNmItODdmNS1hOGRkYzVlNDFkNTMiLCJpYXQiOjE3MDU4MzE1NjMsImV4cCI6MTcwNTgzODc2M30.yHJJZuiSnukaUP2oKWBEN-bJNACjAse2EeXslc-SrnghE0aM9PMlrw4_7osahtczyHVphnB6pXfx4rm3FvUEIw"
-      }
-    })
-    try {
-      if (res.status <= 200 && res.status<=209) {
-        console.log("group created")
-      }
-      else {
-        console.log(res.data)
-      }
-    }
-    catch (err) {
-      console.log(err)
-    }
-  }
+  // const createGroup = async () => {
+  //   const res = await axios.put("https://api.cord.com/v1/groups/my-first-group",{
+  //     name : "my-first-group",
+  //   }, {
+  //     headers: {
+  //       Authorization: "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI0NWQ4YjdjMi1hMzI0LTRjNmItODdmNS1hOGRkYzVlNDFkNTMiLCJpYXQiOjE3MDU4MzE1NjMsImV4cCI6MTcwNTgzODc2M30.yHJJZuiSnukaUP2oKWBEN-bJNACjAse2EeXslc-SrnghE0aM9PMlrw4_7osahtczyHVphnB6pXfx4rm3FvUEIw"
+  //     }
+  //   })
+  //   try {
+  //     if (res.status <= 200 && res.status<=209) {
+  //       console.log("group created")
+  //     }
+  //     else {
+  //       console.log(res.data)
+  //     }
+  //   }
+  //   catch (err) {
+  //     console.log(err)
+  //   }
+  // }
 
-  const addUser = async () => {
-    const res = await axios.put("https://api.cord.com/groups/my-first-group/members",{
-      "add" : ["cordymccordface"]
-    }, {
-      headers: {
-        Authorization: "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI0NWQ4YjdjMi1hMzI0LTRjNmItODdmNS1hOGRkYzVlNDFkNTMiLCJpYXQiOjE3MDU4MTg4MjksImV4cCI6MTcwNTgyNjAyOX0.tV6d9516nR0j6vUX-BezmgmMN87rxj7WIAWgk2Um3XkAL7sjWPf511wc09tUHFwQ1h4XuzxKYeX7hJYu4K_dww"
-      }
-    })
-    try {
-      if (res.status <= 200 && res.status<=209) {
-        console.log("user added to group")
-      }
-      else {
-        console.log(res.data)
-      }
-    }
-    catch (err) {
-      console.log(err)
-    }
-  }
+  // const addUser = async () => {
+  //   const res = await axios.put("https://api.cord.com/groups/my-first-group/members",{
+  //     "add" : ["cordymccordface"]
+  //   }, {
+  //     headers: {
+  //       Authorization: "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhcHBfaWQiOiI0NWQ4YjdjMi1hMzI0LTRjNmItODdmNS1hOGRkYzVlNDFkNTMiLCJpYXQiOjE3MDU4MTg4MjksImV4cCI6MTcwNTgyNjAyOX0.tV6d9516nR0j6vUX-BezmgmMN87rxj7WIAWgk2Um3XkAL7sjWPf511wc09tUHFwQ1h4XuzxKYeX7hJYu4K_dww"
+  //     }
+  //   })
+  //   try {
+  //     if (res.status <= 200 && res.status<=209) {
+  //       console.log("user added to group")
+  //     }
+  //     else {
+  //       console.log(res.data)
+  //     }
+  //   }
+  //   catch (err) {
+  //     console.log(err)
+  //   }
+  // }
 
 
 

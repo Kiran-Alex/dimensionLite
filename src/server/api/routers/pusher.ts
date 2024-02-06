@@ -12,7 +12,7 @@ export const pusherRouter = createTRPCRouter({
         .input(z.object({ message: z.string() }))
         .mutation(async({ input, ctx }) => {
             try{
-            pusher.trigger("chat", "message", input.message);
+            await pusher.trigger("chat", "message", input.message);
             if (ctx.userId) {
               const uname =  await clerkClient.users.getUser(ctx.userId)
               return {

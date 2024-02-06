@@ -8,14 +8,15 @@ import { CordProvider } from "@cord-sdk/react";
 import { Toaster } from "react-hot-toast";
 import "~/styles/globals.css";
 const MyApp: AppType = ({ Component, pageProps }) => {
-  const [cordToken, setCordToken] = useState(undefined);
+  const [cordToken, setCordToken] = useState<string>();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const server = 'http://localhost:3000';
         const response = await fetch(`${server}/api/generate-cord-token`);
-        const data:any = await response.json();
+        const data:{clientAuthToken : string} = await response.json();
+        console.log('data', data);
         setCordToken(data.clientAuthToken);
       } catch (error) {
         console.log('Something went wrong!: ', error);

@@ -15,7 +15,7 @@ import {
     Input,
 } from "@material-tailwind/react";
 import toast from "react-hot-toast"
-const integration = () => {
+const Integration = () => {
 
     const [open, setOpen] = useState(false);
     const [token, setToken] = useState<string>("")
@@ -141,4 +141,4 @@ const integration = () => {
     </>)
 }
 
-export default integration
+export default Integration
