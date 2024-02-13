@@ -1,19 +1,16 @@
 import Layout from "~/components/Layout";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
-import { Select, Option } from "@material-tailwind/react";
+import { Select, Option,Checkbox} from "@material-tailwind/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { SetStateAction } from "react";
 import { AxiosResponse } from "axios";
-
+import toast from "react-hot-toast";
+import { v4 as uuidv4 } from "uuid";
 type usershape = {
     name: string,
     id: string
 }
-
-
-
 interface resultshape extends AxiosResponse {
     status: number,
     data: {
@@ -21,21 +18,15 @@ interface resultshape extends AxiosResponse {
         users: usershape[]
     }
 }
-
-//   type dataShape = {
-//     map(arg0: (dat: dataShape) => import("react").JSX.Element): import("react").ReactNode | Iterable<import("react").ReactNode>;
-//     length: number; name: string, id: string, latestDeployments: Array<{ alias: Array<string>, readyState: string | Array<string> }> 
-//   };
-
 const Create: React.FC = () => {
     const router = useRouter();
     // const currentRoute = router.pathname;
     const { data, isFetched } = api.token.serverToken.useQuery();
-    const [users, setUsers] = useState<usershape[]>([])
-
-
-
-
+    const [users, setUsers] = useState<usershape[]>([]);
+    const [teamName,SetteamName]= useState<string>()
+    const username = api.profile.username.useQuery();
+    const info = api.profile.info.useQuery()
+    
     useEffect(() => {
         const res = async () => {
 
@@ -64,6 +55,53 @@ const Create: React.FC = () => {
         res()
     }, [isFetched])
 
+    const handleSubmit= async() => {
+      console.log("clicked")
+      const CreateUser = async () => {
+        const res = await axios.put(`https://api.cord.com/v1/users/${info.data?.info.id}`,{
+          "name": username.data?.username,
+        }, {
+          headers: {
+            Authorization: `Bearer ${data?.token}`
+          }
+        })
+        try {
+          if (res.status <= 200 && res.status<=209) {
+           toast.loading("Getting Ready")
+          }
+          else {
+            toast.error("something went wrong please try again later ... ")
+          }
+        }
+        catch (err) {
+          console.log(err)
+        }
+      }
+    
+      const CreateGroup = async () => {
+        const res = await axios.put(`https://api.cord.com/v1/groups/${uuidv4()}`,{
+          name : teamName,
+        }, {
+          headers: {
+            Authorization: `Bearer ${data?.token}`
+          }
+        })
+        try {
+          if (res.status <= 200 && res.status<=209) {
+            toast.success("Group Created")
+          }
+          else {
+            toast.error("something went wrong please try again later ... ")
+          }
+        }
+        catch (err) {
+          console.log(err)
+        }
+      }
+
+        CreateUser()
+        CreateGroup()
+    }
 
     return (
         <>
@@ -77,15 +115,20 @@ const Create: React.FC = () => {
                     <div className="w-2/4 h-3/4 flex flex-col justify-between  rounded-lg">
                         <div className="flex flex-col">
                             <label className="block text-sm text-gray-500 dark:text-gray-600">Team Name <span className="text-red-400 align-center font-bold ">*</span></label>
-                            <input type="text" placeholder="Dictator" className="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-300 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-300  dark:text-gray-300 dark:focus:border-blue-300 mb-4" />
-                            <Select placeholder={"rf"} label="Add Members" className="border-gray-200">
+                            <input onChange={(e)=>{e.preventDefault;SetteamName(e.target.value)}} type="text" placeholder="Dictator" className="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-300 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-300  dark:text-gray-300 dark:focus:border-blue-300 mb-4" />
+                            <Select placeholder={"rf"} label="Add Members" className="border-gray-200" selected={(val)=> {
+                                return val?.props.name
+                            }} >
                                 {users.map((user) => {
-                                    return <Option value={user.id} key={user.id}>{user.name}</Option>
+                                    return    <Checkbox crossOrigin="true" key={user.id} value={user.id} label={user.name} color="blue" onSelect={(val)=> {
+                                        return val
+                                    }}/>
                                 })}
+                             
                             </Select>
                             <label className="block text-sm text-gray-400 mt-4">Tip :- You can add members later via group code</label>
                         </div>
-                        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 w-24 self-end">Create</button>
+                        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 w-24 self-end" onClick={()=>{handleSubmit()}}>Create</button>
                     </div>
                 </div>
 

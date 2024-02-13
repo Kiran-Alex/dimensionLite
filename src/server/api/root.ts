@@ -5,6 +5,7 @@ import { pusherRouter } from "./routers/pusher";
 import { openaiRouter } from "./routers/openAI";
 import { IntegrationRouter } from "./routers/integration";
 import { tokenRouter } from "./routers/token";
+import { GroupRouter } from "./routers/groups";
 /**
  * This is the primary router for your server.
  *
@@ -16,7 +17,8 @@ export const appRouter = createTRPCRouter({
   pusher : pusherRouter,
   openAI : openaiRouter,
   integration : IntegrationRouter,
-  token : tokenRouter
+  token : tokenRouter,
+  group : GroupRouter
 });
 
 // export type definition of API

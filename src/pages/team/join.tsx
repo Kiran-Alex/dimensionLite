@@ -1,9 +1,46 @@
 import Layout from "~/components/Layout";
+import { api } from "~/utils/api";
+import axios from "axios";
+import { useState,useEffect } from "react";
+import toast from "react-hot-toast";
 
 const Join: React.FC = () => {
+    const token = api.token.serverToken.useQuery();
+    const profile = api.profile.info.useQuery();
+    const [groupfield,SetGroupField] = useState<String>();
+   
+    const handleSubmit = () => {
+        const addUser = async () => {
+            try {
+            const res = await axios.post(`https://api.cord.com/v1/groups/${groupfield}/members`, {
+                "add": [`${profile.data?.info.id}`]
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token.data?.token}`
+                }
+            })
+            try {
+                if (res.status <= 200 && res.status <= 209) {
+                    toast.success("user added to group")
+                }
+                else {
+                   toast.error("Please Check The Code Again")
+                }
+            }
+            catch (err) {
+                toast.error("Please Check The Code ")
+            }
+        }   
+        catch(err) {
+            toast.error("Please Check The Code or try again later")
+        }
+        }
+        addUser()
+    }
+
     return (
         <>
-             <Layout >
+            <Layout >
                 {/* {currentRoute} */}
 
                 <div className="h-8 w-full flex flex-row items-center">
@@ -13,12 +50,11 @@ const Join: React.FC = () => {
                     <div className="w-2/4 h-1/4 flex flex-col justify-between  rounded-lg">
                         <div className="flex flex-col">
                             <label className="block text-sm text-gray-500 dark:text-gray-600">Enter Code to Join</label>
-                            <input type="text" placeholder="a3hg-yt5z-hdjk-ew23" className="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-300 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-300  dark:text-gray-300 dark:focus:border-blue-300 mb-4" />
+                            <input type="text"  onChange={(e)=>{e.preventDefault,SetGroupField(e.target.value)}} placeholder="a3hg-yt5z-hdjk-ew23" className="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-300 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-300  dark:text-gray-300 dark:focus:border-blue-300 mb-4" />
                         </div>
-                        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 w-24 self-end">Create</button>
+                        <button onClick={()=>{handleSubmit()}} className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 w-24 self-end">Create</button>
                     </div>
                 </div>
-
             </Layout>
         </>
     );

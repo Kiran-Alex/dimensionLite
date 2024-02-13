@@ -29,10 +29,22 @@ export const profileRouter = createTRPCRouter({
             return {
                 username: username.firstName
             }
-
-
-
         }),
+
+    info : publicProcedure
+    .query(async({ctx})=>{
+        const username = await clerkClient.users.getUser(ctx.userId)
+        if (!ctx.userId) {
+            throw new TRPCError({ code: "UNAUTHORIZED" })
+        }
+        return {
+            info :  {
+                id :username.id,
+                username : username.firstName,
+                profilePicture : username.imageUrl
+            }
+        }
+    }),
 
 
     ProfilePicture: publicProcedure
