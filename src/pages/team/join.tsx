@@ -41,7 +41,7 @@ const Join: React.FC = () => {
                 toast.error("Please Check The Code or try again later")
             }
         }
-        // @ts-ignore
+       // eslint-disable-next-line @typescript-eslint/no-floating-promises
         addUser()
     }
 

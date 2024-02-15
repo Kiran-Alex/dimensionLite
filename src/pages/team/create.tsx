@@ -99,9 +99,9 @@ const Create: React.FC = () => {
         console.log(err)
       }
     }
-    // @ts-ignore
+   // eslint-disable-next-line @typescript-eslint/no-floating-promises
     CreateUser()
-      // @ts-ignore
+     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     CreateGroup()
   }
 
