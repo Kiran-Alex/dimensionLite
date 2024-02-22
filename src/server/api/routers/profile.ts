@@ -56,5 +56,19 @@ export const profileRouter = createTRPCRouter({
         return {
             profilePicture: profilePicture.imageUrl
         }
+    }),
+
+   Create : publicProcedure 
+   .query(async({ctx})=> {
+    const user =await clerkClient.users.getUser(ctx.userId)
+    const username =  user.firstName+" "+user.lastName || ""
+
+    await ctx.db.user.create({
+        data : {
+            id : ctx.userId,
+            name : username,
+            
+        }
     })
+   })
 });

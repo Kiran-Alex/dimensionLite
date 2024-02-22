@@ -8,16 +8,35 @@ export const IntegrationRouter = createTRPCRouter({
     TokenRegister:publicProcedure
     .input(z.string())
     .mutation(async({ctx,input})=>{
-      const user =await clerkClient.users.getUser(ctx.userId)
-      const username =  user.firstName+" "+user.lastName || ""
-     await ctx.db.user.create({
-            data : {
-                id : ctx.userId,
-                name : username,
-                authToken : input
+
+        const userexists =  await ctx.db.user.findUnique({
+            where : {
+                id : ctx.userId
             }
         })
+        const user =await clerkClient.users.getUser(ctx.userId)
+        const username =  user.firstName+" "+user.lastName || ""
 
+        if(!userexists ) {
+           
+           await ctx.db.user.create({
+                  data : {
+                      id : ctx.userId,
+                      name : username,
+                      authToken : input
+                  }
+              })
+        }
+        else {
+            await  ctx.db.user.update({
+                where: {
+                    id: ctx.userId
+                },
+                data: {
+                    authToken : input
+                }
+            })
+        }
     }),
 
 

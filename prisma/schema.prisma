@@ -14,7 +14,7 @@ datasource db {
 model User {
   id        String  @id
   name      String
-  authToken String
+  authToken String ?
   groups    Group[]
 }
 
