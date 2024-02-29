@@ -5,6 +5,8 @@ import Layout from "~/components/Layout";
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
   const router = useRouter()
+  const h = api.profile.getGroups.useQuery()
+  
   return (
     <>
       <Head>
@@ -24,6 +26,8 @@ export default function Home() {
 
           index
       </Layout>
+        
+
 
 
     </>

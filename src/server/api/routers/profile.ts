@@ -41,7 +41,8 @@ export const profileRouter = createTRPCRouter({
             info :  {
                 id :username.id,
                 username : username.firstName,
-                profilePicture : username.imageUrl
+                profilePicture : username.imageUrl,
+                
             }
         }
     }),
@@ -67,8 +68,22 @@ export const profileRouter = createTRPCRouter({
         data : {
             id : ctx.userId,
             name : username,
-            
         }
     })
+   }),
+
+   getGroups  :  publicProcedure
+   .query(async({ctx})=>{
+        const userGroups =await  ctx.db.user.findFirst({
+            where : {
+                id : ctx.userId
+            },
+            include : {
+                groups : true
+            }
+        })
+        return   {
+            groups  :  userGroups?.groups
+        }
    })
 });

@@ -1,7 +1,7 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { clerkClient } from "@clerk/nextjs";
 import { TRPCError } from "@trpc/server";
-import { getServerAuthToken } from "@cord-sdk/server";
+import { getServerAuthToken,getClientAuthToken } from "@cord-sdk/server";
 export const tokenRouter = createTRPCRouter({ 
 
     serverToken : publicProcedure
@@ -18,6 +18,23 @@ export const tokenRouter = createTRPCRouter({
             throw new TRPCError({code : "NOT_FOUND", message : "Application ID and Secret not found"})
         }
        
+    }),
+
+
+    clientToken : publicProcedure 
+    .query(async({ctx})=>{
+        if(process.env.NEXT_PUBLIC_CORD_APPLICATION_ID!== undefined && process.env.NEXT_PUBLIC_CORD_SECRET!== undefined){
+            const token = getClientAuthToken(process.env.NEXT_PUBLIC_CORD_APPLICATION_ID,process.env.NEXT_PUBLIC_CORD_SECRET,{
+                user_id : ctx.userId
+            })
+            console.log(token)
+            return {
+                token
+            }
+        }
+        else {
+            throw new TRPCError({code : "NOT_FOUND", message : "Application ID and Secret not found"})
+        }
     })
 
 })

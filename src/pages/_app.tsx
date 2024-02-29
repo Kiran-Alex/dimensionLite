@@ -11,22 +11,30 @@ import { RecoilRoot } from "recoil";
 import "~/styles/globals.css";
 const MyApp: AppType = ({ Component, pageProps }) => {
   const [cordToken, setCordToken] = useState<string>();
+  const {data ,isFetched} = api.token.clientToken.useQuery()
 
   useEffect(() => {
+
+    if(isFetched){
     const fetchData = async () => {
       try {
-        const server = 'http://localhost:3000';
-        const response = await fetch(`${server}/api/generate-cord-token`);
-        const data = await response.json() as { clientAuthToken: string };
-        console.log('data', data);
-        setCordToken(data.clientAuthToken);
+        // const server = 'http://localhost:3000';
+        // const response = await fetch(`${server}/api/generate-cord-token`);
+        // const data = await response.json() as { clientAuthToken: string };
+       
+       
+          setCordToken(data?.token)
+           console.log('data', data);
+       
       } catch (error) {
         console.log('Something went wrong!: ', error);
       }
     };
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fetchData();
-  }, [setCordToken]);
+}
+
+  }, [isFetched]);
 
 
 

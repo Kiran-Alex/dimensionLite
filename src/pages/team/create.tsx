@@ -27,6 +27,9 @@ const Create: React.FC = () => {
   const [teamName, SetteamName] = useState<string>()
   const username = api.profile.username.useQuery();
   const info = api.profile.info.useQuery()
+  const createuser = api.profile.Create.useQuery()
+  const createGroup  = api.group.Create.useMutation()
+  
 
   useEffect(() => {
     const res = async () => {
@@ -68,7 +71,8 @@ const Create: React.FC = () => {
       })
       try {
         if (res.status <= 200 && res.status <= 209) {
-          toast.loading("Getting Ready")
+          console.log("user created")
+
         }
         else {
           toast.error("something went wrong please try again later ... ")
@@ -80,7 +84,8 @@ const Create: React.FC = () => {
     }
 
     const CreateGroup = async () => {
-      const res = await axios.put(`https://api.cord.com/v1/groups/${uuidv4()}`, {
+      const grpID = uuidv4()
+      const res = await axios.put(`https://api.cord.com/v1/groups/${grpID}`, {
         name: teamName,
       }, {
         headers: {
@@ -89,6 +94,12 @@ const Create: React.FC = () => {
       })
       try {
         if (res.status <= 200 && res.status <= 209) {
+          
+          createGroup.mutate({
+            groupId : grpID,
+            groupName : teamName!
+          })
+
           toast.success("Group Created")
         }
         else {

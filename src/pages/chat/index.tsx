@@ -15,6 +15,7 @@ import { api } from '~/utils/api'
 // import { Textarea, IconButton } from "@material-tailwind/react";
 import { useState, useEffect } from 'react'
 import { Thread } from '@cord-sdk/react';
+import toast from 'react-hot-toast';
 // import axios from 'axios'
 
 const Chat = () => {
@@ -150,10 +151,13 @@ const  a: never[] = []
            
 
           </div>
-          <PagePresence groupId="my-first-group" />
+          <PagePresence groupId="4727ca45-ce34-4b08-8d46-25b88a186c60" />
         </div>
         <div className="flex flex-grow justify-between flex-col ">
-          <Thread threadId="a-first-conversation" groupId="my-first-group" composerExpanded ={true}  showPlaceholder={true} />
+          
+        <Thread threadId="4727ca45-ce34-4b08-8d46-25b88a186c60" groupId="4727ca45-ce34-4b08-8d46-25b88a186c60" composerExpanded ={true} onRender={()=>{
+          toast.success("rendered")
+        }} showPlaceholder={true}/>
           
         </div>
         {/* <div style={{ height: "39em" }} className='flex  flex-col justify-center overflow-auto'>

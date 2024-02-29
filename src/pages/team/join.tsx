@@ -22,7 +22,7 @@ const Join: React.FC = () => {
                     })
                     try {
                         if (res.status <= 200 && res.status <= 209) {
-                            toast.success("user added to group")
+                            toast.success("successfully joined the group")
                         }
                         else {
                             toast.error("Please Check The Code Again")
