@@ -89,6 +89,8 @@ const Create: React.FC = () => {
     const CreateGroup = async () => {
       const grpID = uuidv4()
       setGrppID(grpID)
+
+      if (isFetched){
       const res = await axios.put(`https://api.cord.com/v1/groups/${grpID}`, {
         name: teamName,
         members: [info.data?.info.id]
@@ -114,6 +116,9 @@ const Create: React.FC = () => {
       }
       catch (err) {
         console.log(err)
+      }}else {
+        toast.loading("loading")
+        console.log("loading")
       }
     }
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
