@@ -60,16 +60,22 @@ export const profileRouter = createTRPCRouter({
     }),
 
    Create : publicProcedure 
-   .query(async({ctx})=> {
+   .mutation(async({ctx})=> {
     const user =await clerkClient.users.getUser(ctx.userId)
     const username =  user.firstName+" "+user.lastName || ""
+    const mail  =  user.emailAddresses[0]?.emailAddress 
 
+    if(mail !== undefined){
     await ctx.db.user.create({
         data : {
             id : ctx.userId,
             name : username,
+            mail :  mail
         }
-    })
+    })}
+    else{
+        throw new TRPCError({ code: "NOT_FOUND",message : "Mail not found"})
+    }
    }),
 
    getGroups  :  publicProcedure

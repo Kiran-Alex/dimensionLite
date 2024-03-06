@@ -15,6 +15,7 @@ model User {
   id        String  @id
   name      String
   authToken String ?
+  mail      String
   groups    Group[]
 }
 

@@ -12,7 +12,7 @@ import Chat from "./Chat"
 import Team from "./Team"
 
 const Sidebar = () => {
-    const [NavState, setNavState] = useState("chat")
+    const [NavState, setNavState] = useState("")
     const router = useRouter()
 
     const renderNavState = () => {

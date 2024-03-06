@@ -45,5 +45,25 @@ export const GroupRouter = createTRPCRouter({
         
     }
     }
-    )
+    ),
+
+
+    GetGroupOnId :publicProcedure 
+    .input(z.object({
+        groupId : z.string()
+    }))
+    .query(async({ctx,input})=>{
+       const group =  await ctx.db.group.findUnique({
+        where : {
+            id : input.groupId
+        }
+       })      
+
+       if(group) {
+        return group
+       }
+       else {
+        throw new TRPCError({code : "NOT_FOUND",message : "Group Not Found"})
+       }
+    })
 })
