@@ -38,7 +38,7 @@ const Index = () => {
           <div className="flex flex-row justify-between pb-7 px-3 mt-5">
 
             <div className="flex flex-row w-2/5">
-              <Select size="md" className="bg-black text-white outline-none border-none placeholder:text-whi" placeholder={"rf"} label="team">
+              <Select size="md" className=" " placeholder={"rf"} label="team">
 
                 {groups.isFetched ? groups.data?.groups?.map((grp) => {
                   return <Option key={grp.id}>{grp.name}</Option>

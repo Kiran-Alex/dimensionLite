@@ -16,6 +16,7 @@ export const IntegrationRouter = createTRPCRouter({
         })
         const user =await clerkClient.users.getUser(ctx.userId)
         const username =  user.firstName+" "+user.lastName || ""
+        const mail  =  user.emailAddresses[0]?.emailAddress 
 
         if(!userexists ) {
            
@@ -23,7 +24,8 @@ export const IntegrationRouter = createTRPCRouter({
                   data : {
                       id : ctx.userId,
                       name : username,
-                      authToken : input
+                      authToken : input,
+                      mail  :mail!,
                   }
               })
         }
