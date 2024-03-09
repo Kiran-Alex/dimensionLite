@@ -17,6 +17,7 @@ model User {
   authToken String ?
   mail      String
   groups    Group[]
+  todo  Todo[]
 }
 
 model Group {
@@ -24,6 +25,21 @@ model Group {
   name   String
   users  User   @relation(fields: [userId], references: [id])
   userId String
-
+  todo Todo[]
   @@index([userId])
+}
+
+model Todo {
+  id String @id
+  title String
+  description String ?
+  user  User   @relation(fields: [userId], references: [id])
+  userId  String 
+  group Group?  @relation(fields: [groupId], references: [id]) 
+  groupId String ?
+  date DateTime  ?
+  done Boolean 
+ 
+  @@index([userId])
+  @@index([groupId])
 }

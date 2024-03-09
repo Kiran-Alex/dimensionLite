@@ -6,6 +6,7 @@ import { openaiRouter } from "./routers/openAI";
 import { IntegrationRouter } from "./routers/integration";
 import { tokenRouter } from "./routers/token";
 import { GroupRouter } from "./routers/groups";
+import { todoRouter } from "./routers/todo";
 /**
  * This is the primary router for your server.
  *
@@ -18,7 +19,8 @@ export const appRouter = createTRPCRouter({
   openAI : openaiRouter,
   integration : IntegrationRouter,
   token : tokenRouter,
-  group : GroupRouter
+  group : GroupRouter,
+  todo : todoRouter
 });
 
 // export type definition of API

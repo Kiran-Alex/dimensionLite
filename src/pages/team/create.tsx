@@ -121,10 +121,10 @@ const Create: React.FC = () => {
         console.log("loading")
       }
     }
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    CreateUser()
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    CreateGroup()
+  
+   await  CreateUser()
+  
+   await  CreateGroup()
   }
 
   return (
