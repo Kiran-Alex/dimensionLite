@@ -96,7 +96,7 @@ const Index = () => {
         <div className="flex flex-grow justify-between flex-col ">
           <div className="w-5/5 h-full grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 mt-3">
             {
-              Verceltoken.isLoading && (<>
+              Verceltoken.isFetching && (<>
                 <Link href={``} className="w-27 h-40  border border-gray-300 p-3 flex flex-col justify-between animate-pulse bg-gray-400 rounded-lg">
                   <div>
                     <div className="text-black font-bold "></div>
