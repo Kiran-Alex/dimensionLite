@@ -11,6 +11,8 @@ type tododat = {
   done: boolean,
   user: object,
   group?: object
+  projectType?: string,
+  projectTag?: string,
 }
 
 
@@ -21,7 +23,9 @@ export const todoRouter = createTRPCRouter({
       title: z.string(),
       description: z.string(),
       date: z.date().optional().nullish(),
-      teamId: z.string().optional()
+      teamId: z.string().optional(),
+      projectType: z.string().optional(),
+      projectTag: z.string().optional()
     }))
     .mutation(async ({ ctx, input }) => {
       try {
@@ -31,6 +35,8 @@ export const todoRouter = createTRPCRouter({
           description: input.description,
           date: input.date,
           done: false,
+          projectType : input.projectType,
+          projectTag : input.projectTag,
           user: {
             connect: {
               id: ctx.userId,

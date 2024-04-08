@@ -40,6 +40,8 @@ model Todo {
   groupId String ?
   date DateTime  ?
   done Boolean 
+  projectType String ?
+  projectTag String ?
  
   @@index([userId])
   @@index([groupId])

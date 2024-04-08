@@ -14,7 +14,7 @@ export const GroupRouter = createTRPCRouter({
     .mutation(async({ctx,input})=>{
         await ctx.db.group.create({
             data : {
-                id : input.groupId,
+                id : input.groupId, 
                 name : input.groupName,
                 users : {
                     connect : {

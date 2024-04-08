@@ -1,37 +1,54 @@
 import { z } from "zod";
-
+import { LLMChain } from "langchain/chains"
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { ChatOpenAI } from "@langchain/openai";
-import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { StringOutputParser } from "@langchain/core/output_parsers";
+import { OpenAI } from "@langchain/openai";
+import { PromptTemplate } from "langchain/prompts"
 
 
-const outputParser = new StringOutputParser();
 
-const chatModel = new ChatOpenAI({
+const model = new OpenAI({
     openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_KEY,
-    temperature:0
-});
-
-const prompt = ChatPromptTemplate.fromMessages([
-    ["system", "you are a world class technical document writer who summarizes the conversations"],
-    ["user", "{input}"],
-]);
+    modelName: "gpt-3.5-turbo",
+    temperature: 0.5,
+})
 
 
-const chain = prompt.pipe(chatModel).pipe(outputParser);
 
 export const openaiRouter = createTRPCRouter({
-    summarizer: publicProcedure
-        .input(z.object({
-            texts : z.array(z.string())
-        }))
-        .mutation(async({ input }) => {
-                const k = await chain.invoke({
-                  input: input.texts
-                });
-                console.log(k)
 
-                return k
+    taskCategorizer: publicProcedure
+        .input(z.object({
+            title: z.string(),
+            description: z.string().optional()
+        }))
+        .mutation(async ({ ctx, input }) => {
+            console.log("control reached here")
+            const template = `
+            Given the title: {title} and description: {description}, select the relevant tag from the Project type array : [Web,Cloud,Mobile,Desktop,Server,Other] and Project Tag array : [Bug,Feature,Improvement,Refactor,Other] . Ensure to choose only one of the most suitable tags based on the provided arrays. Answer with the selected tag only; no need for explanations. If the title and description are empty, return "Other".
+OUTPUT FORMAT: JSon Object with the selected tag as the value of the key "Project_Type" and "Project_Tag`
+
+            const prompt = new PromptTemplate({
+                template,
+                inputVariables: ["title", "description"]
+            })
+
+            const chain = new LLMChain({
+                prompt,
+                llm: model
+            })
+
+            const response = await chain.call({
+
+                title: input.title,
+                description: input.description
+
+            })
+
+            return {
+                response: response
+
+            }
         })
+
+
 })

@@ -18,7 +18,7 @@ interface dataShape extends AxiosResponse {
   language: string,
   open_issues_count: number,
   updated_at: Date,
-  fork : boolean
+  fork: boolean
 }
 
 
@@ -74,12 +74,20 @@ const Repositories = () => {
       </div>
       <div className="flex flex-grow pl-5 w-5/5 flex-row justify-center h-48 overflow-y-scroll ">
         <div className=" h-fit w-3/5 py-3 px-3  flex-column ">
-          {data?.map((dt) => { console.log(dt)
-          return(
-            <div key={dt.id} className="h-fit">
-            <RepoCard repoName={dt.name} date={dt.updated_at} language={dt.language} issues={dt.open_issues_count} fork={dt.fork} />
-            </div>
-          )})}
+          <span className="w-5/5 flex justify-center items-center">Repos We Have Access to &nbsp;&nbsp; <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+          </svg>
+          </span> </span>
+          {getGitToken.isError && <div className="text-red-500 dark:text-red-400">Please integrate Github to access this feature</div>}
+          {getGitToken.isLoading && <div className="text-gray-500 dark:text-gray-400">Loading...</div>}
+          {data?.map((dt) => {
+            console.log(dt)
+            return (
+              <div key={dt.id} className="h-fit">
+                <RepoCard repoName={dt.name} date={dt.updated_at} language={dt.language} issues={dt.open_issues_count} fork={dt.fork} />
+              </div>
+            )
+          })}
         </div>
       </div>
     </Layout>
