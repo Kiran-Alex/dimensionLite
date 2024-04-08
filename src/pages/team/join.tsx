@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 const Join: React.FC = () => {
     const token = api.token.serverToken.useQuery();
     const profile = api.profile.info.useQuery();
+    const JoinGroup =  api.group.Join.useMutation();
     const [groupfield, SetGroupField] = useState<string>();
 
     const handleSubmit = () => {
@@ -23,6 +24,7 @@ const Join: React.FC = () => {
                     try {
                         if (res.status <= 200 && res.status <= 209) {
                             toast.success("successfully joined the group")
+                            JoinGroup.mutate(groupfield)
                         }
                         else {
                             toast.error("Please Check The Code Again")

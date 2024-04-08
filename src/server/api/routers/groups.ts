@@ -42,7 +42,17 @@ export const GroupRouter = createTRPCRouter({
         })
     }
     else{
-        
+        await ctx.db.group.create({
+            data:{
+                id:groupidCheck.id,
+                name :  groupidCheck.name,
+                users : {
+                    connect : {
+                        id :  ctx.userId
+                    }
+                }
+            }
+        })
     }
     }
     ),
