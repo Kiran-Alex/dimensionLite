@@ -22,20 +22,9 @@ const Chat = () => {
     // const [open, setOpen] = useState(false);
     // const toggleOpen = () => setOpen((cur) => !cur);
     const groups =  api.profile.getGroups.useQuery()
-    const [data,setData] = useState<datainterface[]|undefined>()
-    const refetchdata = async() => {
-        await groups.refetch()
-    }
 
 
 
-    useEffect(()=>{
-        if(groups.data?.groups?.length!=undefined && data?.length!=undefined ) {
-            if(groups.data?.groups?.length > data?.length ) {
-                refetchdata().catch((err)=>console.log(err))   
-            }
-        }
-    },[groups.isFetched])
     
     return (
         <>
@@ -43,7 +32,8 @@ const Chat = () => {
                 <label className="  text-lg">Chat</label>
                     {   groups.isFetched && groups?.data?.groups?.length == 0 ? 
                         <div className="">Please Join or create a team </div> : groups.data?.groups?.map((grp)=>{
-                            setData(groups.data?.groups)
+                            groups.isFetched ? groups.refetch : null
+                       
                             return (
                                 <>
                                 <Link key={uuidv4()} className="flex items-center py-1 pl-6 bg-gray-50 text-gray-600 transition-colors duration-300 transform rounded-lg mt-3 dark:text-gray-500 hover:bg-gray-100  hover:text-gray-700" href={`/chat/${grp.id}`}>
@@ -58,6 +48,9 @@ const Chat = () => {
                             </>
                             )
                         })
+                    }
+                    {
+                        groups.isLoading && <div>Loading...</div>
                     }
                 {/* <Collapse open={open}>
                     <Card placeholder={"fr"} className="my-4 mx-auto w-8/12">
