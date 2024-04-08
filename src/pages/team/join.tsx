@@ -9,6 +9,8 @@ const Join: React.FC = () => {
     const profile = api.profile.info.useQuery();
     const JoinGroup =  api.group.Join.useMutation();
     const [groupfield, SetGroupField] = useState<string>();
+    const getgrouponid = api.group.GetGroupOnId.useQuery({groupId : groupfield!})
+
 
     const handleSubmit = () => {
         const addUser = async () => {
@@ -23,14 +25,16 @@ const Join: React.FC = () => {
                     })
                     try {
                         if (res.status <= 200 && res.status <= 209) {
+                            if(getgrouponid.data){
                             toast.success("successfully joined the group")
-                            JoinGroup.mutate(groupfield)
+                            JoinGroup.mutate(groupfield)}
                         }
                         else {
                             toast.error("Please Check The Code Again")
                         }
                     }
                     catch (err) {
+                        console.log(err)
                         toast.error("Please Check The Code ")
                     }
                 }
@@ -43,8 +47,10 @@ const Join: React.FC = () => {
                 toast.error("Please Check The Code or try again later")
             }
         }
-       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        addUser()
+
+        addUser().catch((err) => {
+            console.log(err)
+        })
     }
 
     return (

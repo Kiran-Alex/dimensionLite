@@ -42,10 +42,12 @@ export const GroupRouter = createTRPCRouter({
         })
     }
     else{
-        await ctx.db.group.create({
+        await ctx.db.group.update({
+            where : {
+                id :input
+            },
             data:{
-                id:groupidCheck.id,
-                name :  groupidCheck.name,
+              
                 users : {
                     connect : {
                         id :  ctx.userId
