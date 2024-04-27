@@ -194,13 +194,14 @@ const Integration = () => {
 
                                         toast.success('Successfully Connected')
                                         SetVercelStatus(true);
-                                        router.reload()
+                                       
                                         mutate(token)
                                         handleOpen()
                                     }
                                 }
                                 catch (err) {
                                     toast.error("Token Might be Wrong or Expired");
+                                    console.log("token wrong bro")
                                     handleOpen()
                                 }
                             }}>

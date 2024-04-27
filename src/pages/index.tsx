@@ -3,8 +3,6 @@ import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 import Layout from "~/components/Layout";
 export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
-  const router = useRouter()
   const {data,isFetched}= api.profile.getGroups.useQuery()
   
   return (
@@ -28,18 +26,6 @@ export default function Home() {
       </Layout>
         
 
-{
-
-  isFetched && data?.groups?.map((group)=>{
-    return (<>
-      <div>{data.groups?.length}</div>
-      <div key={group.id}>
-        {group.name}
-      </div>
-      </>
-    )
-  })
-}
 
     </>
   );
