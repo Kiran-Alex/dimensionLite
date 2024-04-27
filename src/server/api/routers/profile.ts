@@ -42,7 +42,7 @@ export const profileRouter = createTRPCRouter({
                 id :username.id,
                 username : username.firstName,
                 profilePicture : username.imageUrl,
-                
+                mail : username.emailAddresses[0]?.emailAddress
             }
         }
     }),
@@ -91,5 +91,26 @@ export const profileRouter = createTRPCRouter({
         return   {
             groups  :  userGroups?.groups
         }
+   }),
+
+   CheckUserInDb:publicProcedure
+   .query(async({ctx})=>{
+    const user = await ctx.db.user.findUnique({
+        where : {
+            id:ctx.userId
+        }
+    })
+    if(user){
+        return {
+            user : true
+        }
+    }
+    else{
+        return {
+            user : false
+        }
+    }
    })
+
+
 });

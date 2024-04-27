@@ -1,5 +1,3 @@
-import Layout from "~/components/Layout";
-
 import {
   Dialog,
   DialogHeader,
@@ -8,11 +6,15 @@ import {
   Select,
   Option,
   Textarea,
+  Tooltip
 } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import { v4 as uuidv4 } from "uuid"
 import toast from "react-hot-toast";
+import { linkParser } from "~/utils/linkParser";
+import axios from "axios";
+import Link from "next/link";
 
 interface ResponseData {
   Project_Type: string;
@@ -27,11 +29,244 @@ const Index = () => {
   const [team, setTeam] = useState<string>("")
   const [projectType, setProjectType] = useState<string>("")
   const [projectTag, setProjectTag] = useState<string>("")
+  const [uid, setUid] = useState<string>("")
+  const [UTeamId, setUTeamId] = useState<string>("")
   const handleOpen = () => setOpen(!open);
+  const getGroupinfo = api.group.GetGroupOnId.useQuery({ groupId: UTeamId })
   const groups = api.profile.getGroups.useQuery()
-  const todo = api.todo.create.useMutation()
+  const todo = api.todo.create.useMutation({
+    onSuccess: async () => {
+
+      if (team !== undefined && team !== "") {
+        console.log("control at team is identified")
+        const thisGroup = groups.data?.groups?.find((grp) => grp.id === team)
+        if (thisGroup?.RepositoryLink !== undefined || thisGroup?.RepositoryLink !== null && retreiveGitToken.data?.githubAuthToken !== null || retreiveGitToken.data?.githubAuthToken !== undefined) {
+          const repo = linkParser(thisGroup?.RepositoryLink)
+          try {
+            if(projectTag == "" && projectType == ""){
+              const res: { data: { number: string }, status: number } = await axios.post(`https://api.github.com/repos/${repo.username}/${repo.repository}/issues`, {
+                "title": title,
+                "body": description,
+               
+              }, {
+                headers: {
+                  "Accept": "application/vnd.github.v3+json",
+                  "Authorization": `Bearer ${retreiveGitToken.data?.githubAuthToken}`,
+                  "X-GitHub-Api-Version": "2022-11-28",
+                }
+              })
+  
+              if (res.status >= 200 && res.status <= 209) {
+                updateIssueNo.mutate({ issueNo: res.data.number.toString(), taskId: uid })
+                console.log(res.data.number)
+                setUid("")
+                setTitle("")
+                setDescription("")
+                setDate("")
+                setTeam("")
+                setUid("")
+              }
+            }
+            if(projectTag !== "" && projectType !== ""){
+              const res: { data: { number: string }, status: number } = await axios.post(`https://api.github.com/repos/${repo.username}/${repo.repository}/issues`, {
+                "title": title,
+                "body": description,
+                "labels": [projectType, projectTag]
+              }, {
+                headers: {
+                  "Accept": "application/vnd.github.v3+json",
+                  "Authorization": `Bearer ${retreiveGitToken.data?.githubAuthToken}`,
+                  "X-GitHub-Api-Version": "2022-11-28",
+                }
+              })
+  
+              if (res.status >= 200 && res.status <= 209) {
+                updateIssueNo.mutate({ issueNo: res.data.number.toString(), taskId: uid })
+                console.log(res.data.number)
+                setUid("")
+                setTitle("")
+                setDescription("")
+                setDate("")
+                setTeam("")
+                setUid("")
+              }
+            }
+            if(projectTag !== "" && projectType == ""){
+              const res: { data: { number: string }, status: number } = await axios.post(`https://api.github.com/repos/${repo.username}/${repo.repository}/issues`, {
+                "title": title,
+                "body": description,
+                "labels": [ projectTag]
+              }, {
+                headers: {
+                  "Accept": "application/vnd.github.v3+json",
+                  "Authorization": `Bearer ${retreiveGitToken.data?.githubAuthToken}`,
+                  "X-GitHub-Api-Version": "2022-11-28",
+                }
+              })
+  
+              if (res.status >= 200 && res.status <= 209) {
+                updateIssueNo.mutate({ issueNo: res.data.number.toString(), taskId: uid })
+                console.log(res.data.number)
+                setUid("")
+                setTitle("")
+                setDescription("")
+                setDate("")
+                setTeam("")
+                setUid("")
+              }
+            }
+            if(projectTag == "" && projectType !== ""){
+              const res: { data: { number: string }, status: number } = await axios.post(`https://api.github.com/repos/${repo.username}/${repo.repository}/issues`, {
+                "title": title,
+                "body": description,
+                "labels": [projectType]
+              }, {
+                headers: {
+                  "Accept": "application/vnd.github.v3+json",
+                  "Authorization": `Bearer ${retreiveGitToken.data?.githubAuthToken}`,
+                  "X-GitHub-Api-Version": "2022-11-28",
+                }
+              })
+  
+              if (res.status >= 200 && res.status <= 209) {
+                updateIssueNo.mutate({ issueNo: res.data.number.toString(), taskId: uid })
+                console.log(res.data.number)
+                setUid("")
+                setTitle("")
+                setDescription("")
+                setDate("")
+                setTeam("")
+                setUid("")
+              }
+            }
+
+            const res: { data: { number: string }, status: number } = await axios.post(`https://api.github.com/repos/${repo.username}/${repo.repository}/issues`, {
+              "title": title,
+              "body": description,
+              "labels": [projectType, projectTag]
+            }, {
+              headers: {
+                "Accept": "application/vnd.github.v3+json",
+                "Authorization": `Bearer ${retreiveGitToken.data?.githubAuthToken}`,
+                "X-GitHub-Api-Version": "2022-11-28",
+              }
+            })
+
+            if (res.status >= 200 && res.status <= 209) {
+              updateIssueNo.mutate({ issueNo: res.data.number.toString(), taskId: uid })
+              console.log(res.data.number)
+              setUid("")
+              setTitle("")
+              setDescription("")
+              setDate("")
+              setTeam("")
+              setUid("")
+            }
+
+
+          }
+          catch (err) {
+            console.log(err)
+          }
+
+        }
+        else {
+          setTitle("")
+          setDescription("")
+          setDate("")
+          setTeam("")
+          setUid("")
+          toast.success("Task created")
+        }
+      }
+      else {
+
+        setTitle("")
+        setDescription("")
+        setDate("")
+        setTeam("")
+        setUid("")
+
+        toast.success("Task created")
+        await getTodos.refetch()
+      }
+      await getTodos.refetch()
+
+    }
+  })
   const getTodos = api.todo.getTodos.useQuery()
-  const updateTodo = api.todo.updateTodo.useMutation()
+  const updateTodo = api.todo.updateTodo.useMutation({
+    onSuccess: async (res) => {
+      getTodoOnId.mutate({ taskId: res.todoexist.id })
+    }
+  })
+  const getTodoOnId = api.todo.getTodoOnId.useMutation({
+    onSuccess: async (res) => {
+      if (res.todo.done == true && res.todo?.GithubIssueNo !== null && res.todo.GithubIssueNo !== undefined) {
+        setUTeamId(res.todo.groupId!)
+        const data = await getGroupinfo.refetch()
+        if (data.isFetched && data.data?.RepositoryLink !== null && data.data?.RepositoryLink !== undefined) {
+          try {
+            const info = linkParser(data.data?.RepositoryLink)
+            const resaxios = await axios.post(`https://api.github.com/repos/${info.username}/${info.repository}/issues/${res.todo.GithubIssueNo}`, {
+              "state": "closed",
+            }, {
+              headers: {
+                "Accept": "application/vnd.github.v3+json",
+                "Authorization": `Bearer ${retreiveGitToken.data?.githubAuthToken}`,
+                "X-GitHub-Api-Version": "2022-11-28",
+              }
+            })
+            if (resaxios.status >= 200 && resaxios.status <= 209) {
+              toast.success("Closed the issue ")
+              setUTeamId("")
+            }
+            else {
+              console.log("issue close problem")
+            }
+          }
+          catch (err) {
+            console.log(err)
+          }
+        }
+      }
+      else if (res.todo.done == false && res.todo?.GithubIssueNo !== null && res.todo.GithubIssueNo !== undefined) {
+        setUTeamId(res.todo.groupId!)
+        const data = await getGroupinfo.refetch()
+        if (data.isFetched) {
+          try {
+            const info = linkParser(data.data?.RepositoryLink)
+            console.log("info", info)
+            const resaxios = await axios.post(`https://api.github.com/repos/${info.username}/${info.repository}/issues/${res.todo.GithubIssueNo}`, {
+              "state": "open",
+            }, {
+              headers: {
+                "Accept": "application/vnd.github.v3+json",
+                "Authorization": `Bearer ${retreiveGitToken.data?.githubAuthToken}`,
+                "X-GitHub-Api-Version": "2022-11-28",
+              }
+            })
+            if (resaxios.status >= 200 && resaxios.status <= 209) {
+              toast.success("Created the issue ")
+              setUTeamId("")
+            }
+            else {
+              console.log("issue close problem")
+            }
+          }
+          catch (err) {
+            console.log(err)
+          }
+        }
+        else {
+          console.log("problem in getting group info")
+        }
+      }
+    }
+  })
+
+  const updateIssueNo = api.todo.updateIssueNOOnId.useMutation();
+  const retreiveGitToken = api.integration.GithubRetreiveToken.useQuery()
   const [checkedTasks, setCheckedTasks] = useState<string[]>([]);
   const { mutate, isLoading } = api.openAI.taskCategorizer.useMutation({
     onSuccess(data) {
@@ -40,29 +275,15 @@ const Index = () => {
       setProjectTag(res.Project_Tag)
       console.log(res)
     },
-  })
-
-
-
-
+  });
 
   const handleSubmit = async () => {
     try {
       if (title.length > 0 && groups.isFetched) {
         const myDate = new Date(date);
-        todo.mutate({ title, description, date: myDate, teamId: team, id: uuidv4(),projectType:projectType,projectTag:projectTag })
-
-        if (todo.isSuccess) {
-          await getTodos.refetch()
-          console.log('Updated Todos:', getTodos.data);
-          setTitle("")
-          setDescription("")
-          setDate("")
-          setTeam("")
-
-          toast.success("Task created")
-        }
-
+        const uniqueId = uuidv4()
+        setUid(uniqueId)
+        todo.mutate({ title, description, date: myDate, teamId: team, id: uniqueId, projectType: projectType, projectTag: projectTag })
       }
       else {
         toast.error("please enter a title ")
@@ -71,12 +292,14 @@ const Index = () => {
     catch (err) {
       console.log(err)
     }
-    console.log(title, description, date, team)
-    handleOpen()
+    finally {
+      handleOpen()
+      console.log(title, description, date, team)
+    }
   }
 
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, taskId: string): void => {
+  const handleCheckboxChange = async (e: React.ChangeEvent<HTMLInputElement>, taskId: string) => {
     setCheckedTasks((prevCheckedTasks: string[]) => {
       if (prevCheckedTasks.includes(taskId)) {
         return prevCheckedTasks.filter((id: string) => id !== taskId);
@@ -115,7 +338,7 @@ const Index = () => {
 
 
   return (
-    <Layout>
+    <div className="flex flex-col w-screen pt-3 px-16 h-screen overflow-auto">
       <div className="flex h-8 w-full flex-row items-center justify-between">
         <div className="flex flex-row ">
           <span>My Tasks</span>
@@ -123,7 +346,7 @@ const Index = () => {
             {getTodos.isFetched ? getTodos.data?.count : 0}
           </div>
         </div>
-        <Button placeholder={"rf"} onClick={() => { setProjectTag(""); setProjectType("") ; handleOpen() }} className="w-30 h-8 bg-black text-white px-3 py-1 text-xs  rounded-md hover:bg-gray-900 mb ">Create Task</Button>
+       {groups.isFetched && groups.data?.groups!== undefined ?  <Button placeholder={"rf"} onClick={() => { setProjectTag(""); setProjectType(""); handleOpen() }} className="w-30 h-8 bg-black text-white px-3 py-1 text-xs  rounded-md hover:bg-gray-900 mb ">Create Task</Button>:<><Tooltip content="create a team to create task"><Button placeholder={"rf"}  className="w-30 h-8 bg-gray-700 text-white px-3 py-1 text-xs rounded-md  ">Create Task</Button></Tooltip></>}
         <Dialog placeholder={"rf"} open={open} handler={handleOpen}>
           <DialogHeader placeholder={"rf"}><input type="text" onChange={(e) => {
             e.preventDefault()
@@ -135,10 +358,8 @@ const Index = () => {
               setDescription(e.target.value)
             }} className="h-36 border  border-none bg-gray-100 outline-none placeholder:text-lg " />
             <div className="h-10 w-full flex flex-row justify-between items-center">
+              {!isLoading ? <><div className="w-24">
 
-
-             {!isLoading ?  <><div className="w-24">
-            
                 <Select placeholder={"rf"} value={projectType} className=" border-gray-200" onChange={(val) => { setProjectType(val!) }} label="Project">
                   <Option value="Web">Web</Option>
                   <Option value="Mobile">Mobile</Option>
@@ -148,23 +369,24 @@ const Index = () => {
                   <Option value="Other">Other</Option>
                 </Select>
               </div>
-              <div className="w-24">
+                <div className="w-24">
 
-                <Select placeholder={"rf"} value={projectTag} className=" border-gray-200" onChange={(val) => { setProjectTag(val!) }} label="Tag">
-                  <Option value="Bug">Bug</Option>
-                  <Option value="Feature">Feature</Option>
-                  <Option value="Improvement">Improvement</Option>
-                  <Option value="Refactor">Refactor</Option>
-                  <Option value="Other">Other</Option>
+                  <Select placeholder={"rf"} value={projectTag} className=" border-gray-200" onChange={(val) => { setProjectTag(val!) }} label="Tag">
+                    <Option value="Bug">Bug</Option>
+                    <Option value="Feature">Feature</Option>
+                    <Option value="Improvement">Improvement</Option>
+                    <Option value="Refactor">Refactor</Option>
+                    <Option value="Other">Other</Option>
 
-                </Select>
-              </div> </>: <>
-              <div className=" w-52 h-full bg-gray-200 rounded-lg animate-pulse">
-              </div>
-              <div className=" w-52 h-full bg-gray-200 rounded-lg animate-pulse">
-              </div>
+                  </Select>
+                </div> </> : <>
+                <div className=" w-52 h-full bg-gray-200 rounded-lg animate-pulse">
+                </div>
+                <div className=" w-52 h-full bg-gray-200 rounded-lg animate-pulse">
+                </div>
               </>
               }
+
 
 
               <div className="mr-4 flex flex-row justify-center items-center p-1 rounded-2xl  hover:bg-gray-200 cursor-pointer" onClick={handleai}>
@@ -228,7 +450,7 @@ const Index = () => {
       {getTodos.isFetched && getTodos.data?.count === 0 ? <>
         <div className='w-full h-full bg-gray-200 rounded-md flex flex-row justify-center items-center'>
           <div className='w-1/5 h-1/12 text-center '>No Tasks Yet , Click create Task to create one</div>
-        </div></> : <> <div className="flex flex-grow flex-col">
+        </div></> : <> <div className="flex h-fit flex-col">
           {getTodos.isFetched &&
             getTodos.data?.data.map((td) => {
               const GrpName = groups.data?.groups?.find((grp) => grp.id === td.groupid);
@@ -240,25 +462,29 @@ const Index = () => {
                   <div className="flex flex-row justify-center items-center ">
                     <input
                       type="checkbox"
-                      className="w-5 h-5 ml-2"
-                      checked={checkedTasks.includes(td.id)}
-                      onChange={(e) => { handleCheckboxChange(e, td.id) }}
+                      className="w-5 h-5 ml-2 z-10"
+                      checked={td.done}
+                      onChange={(e) => { handleCheckboxChange(e, td.id).catch(err => console.log(err)) }}
                     />
                     &nbsp;
-                    <span className={`ml-2 ${checkedTasks.includes(td.id) ? "line-through" : ""}`}>
+                    <span className={`ml-2 ${td.done ? "line-through" : ""}`}>
                       {td.title}
                     </span>
+                    <Link href={`team/${td.id}`}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="ml-5 w-4 h-4 hover:cursor-pointer">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                    </svg></Link>
+
                   </div>
 
                   <div className="flex flex-row mr-2 font-bold">
-                    <span className={`ml-2 ${checkedTasks.includes(td.id) ? "line-through" : ""}`}>{td.date?.toDateString()}&nbsp;{td.date == null && null}{td.groupid == "" || null && null}{td.date !== null && td.groupid == null && null}{td.date == null && td.groupid == null && null}{td.date !== null && td.groupid !== null && "|"}<span>&nbsp;{GrpName?.name}</span></span>
+                    <span className={`ml-2 ${td.done ? "line-through" : ""}`}>{td.date?.toDateString()}&nbsp;{td.date == null && null}{td.groupid == "" || null && null}{td.date !== null && td.groupid == null && null}{td.date == null && td.groupid == null && null}{td.date !== null && td.groupid !== null && "|"}<span>&nbsp;{GrpName?.name}</span></span>
                   </div>
                 </div>
               );
             })}
         </div></>}
 
-    </Layout>
+    </div>
   );
 };
 

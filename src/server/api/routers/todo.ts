@@ -6,7 +6,7 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 type tododat = {
   id: string,
   title: string,
-  description: string,
+  description: string | undefined,
   date: Date | null | undefined,
   done: boolean,
   user: object,
@@ -21,7 +21,7 @@ export const todoRouter = createTRPCRouter({
     .input(z.object({
       id: z.string(),
       title: z.string(),
-      description: z.string(),
+      description: z.string().optional(),
       date: z.date().optional().nullish(),
       teamId: z.string().optional(),
       projectType: z.string().optional(),
@@ -114,5 +114,103 @@ export const todoRouter = createTRPCRouter({
     else {
       throw new TRPCError({code : "NOT_FOUND",message : "Todo not found"})
     }
+  }),
+
+  updateIssueNOOnId: publicProcedure
+  .input(z.object({
+    issueNo: z.string(),
+    taskId: z.string()
+  }))
+  .mutation(async({ctx,input})=>{
+    const todoexist = await ctx.db.todo.update({
+      where : {
+        userId : ctx.userId,
+        id : input.taskId
+      },
+      data : {
+        GithubIssueNo : input.issueNo
+      }
+    
+    })
+    if(todoexist){
+    return {
+      todoexist
+    }}
+    else {
+      throw new TRPCError({code : "NOT_FOUND",message : "Todo not found"})
+    }
+  }),
+
+  getTodoOnId:publicProcedure
+  .input(z.object({
+    taskId: z.string()  
+  }))
+  .mutation(async({ctx,input})=>{
+   const res =   await ctx.db.todo.findUnique({
+      where : {
+        id : input.taskId,
+      }
+    })
+    if(res) {
+      return {
+        todo : res
+      }
+    }
+    else {
+      throw new TRPCError({code : "NOT_FOUND",message : "Todo not found"})
+    }
+  }),
+
+  updateMasterTodo : publicProcedure
+  .input(z.object({
+    taskId: z.string(),
+    done :  z.boolean(),
+    date: z.date().optional().nullish(),
+    projectType: z.string().optional(),
+    projectTag: z.string().optional()
+  }))
+  .mutation(async({ctx,input})=>{
+    const todoexist = await ctx.db.todo.update({
+      where : {
+        userId : ctx.userId,
+        id : input.taskId
+      },
+      data : {
+        done: input.done,
+        date : input.date,
+        projectType : input.projectType,
+        projectTag : input.projectTag
+      }
+    
+    })
+    if(todoexist){
+    return {
+      todoexist
+    }}
+    else {
+      throw new TRPCError({code : "NOT_FOUND",message : "Todo not found"})
+    }
+  }),
+
+  deleteTodo: publicProcedure
+  .input(z.object({
+    taskId: z.string()
+  }))
+  .mutation(async({ctx,input})=>{
+    const deleteTodo = await ctx.db.todo.delete({
+      where : {
+        id : input.taskId,
+      }
+    })
+    if(deleteTodo) {
+      return {
+        TodoDelete: true
+      }
+    }
+    else {
+      throw new TRPCError({code : "NOT_FOUND",message : "Todo not found"})
+    }
   })
+
+
 })

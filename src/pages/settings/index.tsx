@@ -4,6 +4,7 @@ import { api } from "~/utils/api"
 const index = () => {
 
     const profilepic = api.profile.ProfilePicture.useQuery()
+    const userInfo = api.profile.info.useQuery()
     return (
         <Layout>
             <div className="h-8 w-full flex flex-row items-center">
@@ -40,21 +41,15 @@ const index = () => {
                         <div className="w-5/5 flex flex-row justify-center mt-6">
                             {profilepic.isFetched&& profilepic.data?.profilePicture!== undefined && <Image className="object-cover w-48 h-48 rounded-full" width={170} height={12} src={profilepic.data?.profilePicture} alt="" />}
                             {profilepic.isLoading && <div className="animate-pulse w-48 h-48 rounded-full bg-gray-300" ></div> }
-                            
-                          
-                           
-
-
-
                         </div>
 
                         <label className="block text-sm text-gray-500 dark:text-gray-600">Name</label>
 
-                        <input type="text" placeholder="Fleet" className="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-300 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-300  dark:text-gray-300 dark:focus:border-blue-300" />
+                        <input type="text" placeholder={userInfo.data?.info.username ?? ''} className="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-300 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-300  dark:text-gray-300 dark:focus:border-blue-300" />
 
-                        <label className="block text-sm text-gray-500 mt-2 dark:text-gray-600">Realm URL</label>
+                        <label className="block text-sm text-gray-500 mt-2 dark:text-gray-600">Email</label>
 
-                        <input type="text" placeholder="dimesionlite/a45dfrdf" className="block  mt-2 w-full  dark:placeholder-gray-300 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-300  dark:text-gray-300 dark:focus:border-blue-300" />
+                        <input type="text" placeholder={userInfo.data?.info.mail ?? ""} className="block  mt-2 w-full  dark:placeholder-gray-300 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-300  dark:text-gray-300 dark:focus:border-blue-300" />
 
                         <label className="block text-sm text-gray-500 mt-2 dark:text-gray-600">Tag Line</label>
 

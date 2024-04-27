@@ -73,27 +73,27 @@ const Index = () => {
     if (data !== undefined) {
       console.log(data)
       console.log("len", data.length)
-      if (data.length == 0) {
-        return <p>No Deployments</p>
-      }
+   
     }
   }
+
+
 
   return (
     <>
 
-      <Layout>
+      <div className="flex flex-col w-screen pt-3 pb-6 px-16 h-screen ">
         <style jsx global>{`
       .sidebar-2 {
          display: none ;
            }
         `}</style>
 
-        <div className="flex items-center pl-3 overflow-x-auto whitespace-nowrap">
+        <div className="flex items-center  whitespace-nowrap">
           <h1 className="font-bold"> Deployments</h1>
         </div>
 
-        <div className="flex flex-grow justify-between flex-col ">
+        <div className="flex flex-grow justify-between flex-col overflow-auto ">
           <div className="w-5/5 h-full grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 mt-3">
             {
               Verceltoken.isFetching && (<>
@@ -150,12 +150,16 @@ const Index = () => {
                 </Link>)
               })
 
-
             }
+            {
+              Verceltoken.data?.vercelAuthToken == undefined  && <div className="text-red-400">Please connect your vercel account</div>
+            }
+
+            {Verceltoken.isFetched && data?.length == 0 && <div className="text-red-400">No deployments found</div>}
 
           </div>
         </div>
-      </Layout>
+      </div>
     </>
   )
 }

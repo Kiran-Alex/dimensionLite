@@ -1,10 +1,9 @@
 import Layout from '~/components/Layout'
 import Link from 'next/link'
-import { PagePresence } from '@cord-sdk/react';
+
 import { api } from '~/utils/api';
 import { useState, useEffect } from 'react'
-import { Thread } from '@cord-sdk/react';
-import toast from 'react-hot-toast';
+
 
 const Chat = () => {
   const [chats, setChats] = useState([]);
@@ -18,8 +17,9 @@ const Chat = () => {
   useEffect (()=>{
     if (usergroups.isFetched) {
       usergroups.data?.groups?.map((grp)=> {
-        setAllGroups([grp])
-        console.log(allGroups)
+        key : grp.id
+        setAllGroups([{ id: grp.id, name: grp.name, userId: '' }])
+       
       })
     }
   },[usergroups.isLoading])
@@ -47,12 +47,10 @@ const Chat = () => {
             </a>
             &nbsp;
           </div>
-          <PagePresence groupId="4727ca45-ce34-4b08-8d46-25b88a186c60" />
+        
         </div>
         <div className="flex flex-grow justify-between flex-col ">
-        {/* <Thread threadId="4727ca45-ce34-4b08-8d46-25b88a186c60" groupId="4727ca45-ce34-4b08-8d46-25b88a186c60" composerExpanded ={true} onRender={()=>{
-          toast.success("rendered")
-        }} showPlaceholder={true}/> */}
+
         <div className='w-full h-full bg-gray-200 rounded-md flex flex-row justify-center items-center'>
           <div className='w-1/5 h-1/12 text-center '>Select a Chat To Start Messaging</div>
         </div>

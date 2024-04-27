@@ -24,10 +24,9 @@ model User {
 model Group {
   id     String @id
   name   String
-  users  User   @relation(fields: [userId], references: [id])
-  userId String
-  todo Todo[]
-  @@index([userId])
+  users  User[]
+  todo   Todo[]
+  RepositoryLink String ?
 }
 
 model Todo {
@@ -42,6 +41,7 @@ model Todo {
   done Boolean 
   projectType String ?
   projectTag String ?
+  GithubIssueNo String ?
  
   @@index([userId])
   @@index([groupId])

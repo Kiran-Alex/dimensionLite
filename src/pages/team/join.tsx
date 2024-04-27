@@ -7,9 +7,14 @@ import toast from "react-hot-toast";
 const Join: React.FC = () => {
     const token = api.token.serverToken.useQuery();
     const profile = api.profile.info.useQuery();
-    const JoinGroup =  api.group.Join.useMutation();
+    const JoinGroup = api.group.Join.useMutation();
     const [groupfield, SetGroupField] = useState<string>();
-    const getgrouponid = api.group.GetGroupOnId.useQuery({groupId : groupfield!})
+    const getgrouponid = api.group.GetGroupOnId.useQuery({ groupId: groupfield! })
+    const checkuserindb = api.profile.CheckUserInDb.useQuery()
+    const createuser = api.profile.Create.useMutation()
+
+
+    
 
 
     const handleSubmit = () => {
@@ -25,14 +30,26 @@ const Join: React.FC = () => {
                     })
                     try {
                         if (res.status <= 200 && res.status <= 209) {
-                            if(getgrouponid.data){
-                            toast.success("successfully joined the group")
-                            JoinGroup.mutate(groupfield)}
+                            if (getgrouponid.data) {
+                                if (checkuserindb.data?.user == false) {
+                                    createuser.mutate()
+                                    JoinGroup.mutate(groupfield)
+                                    toast.success("successfully joined the group")
+                                }
+                                else {
+                                   
+                                    JoinGroup.mutate(groupfield)
+                                    toast.success("successfully joined the group")
+                                }
+                                
+                            }
+                           
                         }
                         else {
                             toast.error("Please Check The Code Again")
                         }
                     }
+
                     catch (err) {
                         console.log(err)
                         toast.error("Please Check The Code ")
@@ -61,6 +78,7 @@ const Join: React.FC = () => {
                 <div className="h-8 w-full flex flex-row items-center">
                     Join Team
                 </div>
+                
                 <div className="flex flex-grow justify-center items-center">
                     <div className="w-2/4 h-1/4 flex flex-col justify-between  rounded-lg">
                         <div className="flex flex-col">

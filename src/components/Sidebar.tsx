@@ -2,7 +2,7 @@ import logo from "../../public/logo.png"
 import Link from "next/link"
 import Setting from "./Setting"
 import Image from "next/image"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { UserButton } from "@clerk/nextjs"
 import { SignOutButton } from "@clerk/nextjs";
@@ -14,20 +14,25 @@ import Team from "./Team"
 const Sidebar = () => {
     const [NavState, setNavState] = useState("")
     const router = useRouter()
+    const pathname = router.pathname.replace("/", "")
+    useEffect(()=>{
+        setNavState(pathname)
+    },[pathname])
+
 
     const renderNavState = () => {
-        switch (NavState) {
-            case "settings":
+        switch (true) {
+            case NavState.startsWith("settings"):
 
                 return <Setting />
                 break;
 
-            case "chat" : 
+            case NavState.startsWith("chat") : 
             return <Chat/>
             break;
 
 
-            case "team" :
+            case NavState.startsWith("team") :
                 return  <Team/>
                 break;
 

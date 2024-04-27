@@ -15,23 +15,44 @@ import {
     Input,
 } from "@material-tailwind/react";
 import toast from "react-hot-toast"
-const Integration = () => {
+import { useRouter } from "next/router"
+import { useSearchParams } from "next/navigation"
 
+
+const Integration = () => {
+    const router = useRouter();
+    const param = useSearchParams()
     const [open, setOpen] = useState(false);
-    const [gitopen, setgitOpen] = useState(false);
     const [token, setToken] = useState<string>("")
     const [gitToken, setGitToken] = useState<string>("")
     const [VercelStatus, SetVercelStatus] = useState<boolean>(false)
     const [GithubStatus, SetGithubStatus] = useState<boolean>(false)
     const handleOpen = () => setOpen(!open);
-    const handlegitOpen = () => setgitOpen(!gitopen);
     const [load, setLoad] = useState<boolean>(true)
     const [Gitload, setGitLoad] = useState<boolean>(true)
     const { mutate, data } = api.integration.TokenRegister.useMutation()
     const authToken = api.integration.RetreiveToken.useQuery()
-    const githubRegAuthToken = api.integration.GithubTokenRegister.useMutation();
     const githubRetreiveAuthToken = api.integration.GithubRetreiveToken.useQuery()
-    console.log(GithubStatus, Gitload)
+    const clientId =process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID
+    const gitAccessToken = api.integration.getGitAccessTokenandRegister.useMutation({onSuccess:async()=>{
+        toast.success("Github Connected Please Refresh the Page to see the changes!"); await githubRetreiveAuthToken.refetch()
+    }})
+    console.log(GithubStatus,Gitload)
+    const gitcode =  param.get("code")
+
+    useEffect(()=>{
+        if(gitcode!== null && gitcode !== undefined){
+            console.log("Code is there"+gitcode.toString())
+            gitAccessToken.mutate({code:gitcode.toString()})
+            
+        }
+        else {
+            console.log("No Code")
+        }
+    },[gitcode])
+
+
+    
     useEffect(() => {
         try {
             const VercelCheck = async () => {
@@ -56,6 +77,8 @@ const Integration = () => {
 
                 catch (err) {
                     console.log(err)
+                    setLoad(false)
+                    SetVercelStatus(false)
                 }
             }
             const GithubCheck = async () => {
@@ -92,12 +115,16 @@ const Integration = () => {
                 await GithubCheck();
             }
             fetchData().catch(err => console.log(err))
+            
+          
         }
 
         catch (err) {
             console.log(err)
         }
-    }, [authToken])
+    }, [authToken,gitToken])
+
+
 
     return (<>
         <Head>
@@ -125,56 +152,19 @@ const Integration = () => {
             <div className="flex flex-grow pl-5 w-5/5 ">
                 <div style={{ height: "34em" }} className=" mt-8 flex flex-col w-9/12  ">
                     <div className="h-fit w-5/5"><h1 className="text-gray-500 text-xl font-bold">Integrations</h1></div>
-                    <button className="w-fit h-fit" onClick={(e) => { { GithubStatus == false && Gitload == true && null } { GithubStatus !== false && Gitload !== true && e.preventDefault() } { GithubStatus == false && Gitload == false && handlegitOpen() } }}>
+
+
+        
+
+
+                    <button className="w-fit h-fit" onClick={(e) => { { GithubStatus == false && Gitload == true && null } { GithubStatus !== false && Gitload !== true && e.preventDefault() } { GithubStatus == false && Gitload == false &&  window.location.assign(`https://github.com/login/oauth/authorize?client_id=${clientId}&scope=repo,user`) } }}>
                         <Card loading={Gitload} image={<svg className="w-16 h-16 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                             <path fillRule="evenodd" d="M12 2c-2.4 0-4.7.9-6.5 2.4a10.5 10.5 0 0 0-2 13.1A10 10 0 0 0 8.7 22c.5 0 .7-.2.7-.5v-2c-2.8.7-3.4-1.1-3.4-1.1-.1-.6-.5-1.2-1-1.5-1-.7 0-.7 0-.7a2 2 0 0 1 1.5 1.1 2.2 2.2 0 0 0 1.3 1 2 2 0 0 0 1.6-.1c0-.6.3-1 .7-1.4-2.2-.3-4.6-1.2-4.6-5 0-1.1.4-2 1-2.8a4 4 0 0 1 .2-2.7s.8-.3 2.7 1c1.6-.5 3.4-.5 5 0 2-1.3 2.8-1 2.8-1 .3.8.4 1.8 0 2.7a4 4 0 0 1 1 2.7c0 4-2.3 4.8-4.5 5a2.5 2.5 0 0 1 .7 2v2.8c0 .3.2.6.7.5a10 10 0 0 0 5.4-4.4 10.5 10.5 0 0 0-2.1-13.2A9.8 9.8 0 0 0 12 2Z" clipRule="evenodd" />
                         </svg>
                         } title="Github" connected={GithubStatus} /></button>
-                    <Dialog placeholder={"fr"} open={gitopen} handler={handlegitOpen}>
-                        <DialogHeader placeholder={"fr"}>Github Integration</DialogHeader>
-                        <DialogBody placeholder={"fr"}>
+      
 
-                            <Input label="enter access token" onChange={(e) => { e.preventDefault(); setGitToken(e.target.value) }} crossOrigin={"fr"} />
-                            <span className="text-xs mt-6 text-gray-600">You can Find It  <a className="text-black underline" target="_blank" href="https://github.com/settings/tokens?type=beta">here</a> <span>. We recommend you to put expiration above <span className="font-bold">90 days</span> for Good Experience</span></span>
-                        </DialogBody>
-                        <DialogFooter placeholder={"fr"}>
-                            <Button placeholder={"fr"}
-                                variant="text"
-                                color="red"
-                                onClick={handlegitOpen}
-                                className="mr-1"
-                            >
-                                <span>Close</span>
-                            </Button>
-                            <Button placeholder={"fr"} variant="gradient" color="green" onClick={async () => {
-
-                                try {
-                                    const result = await axios.get('https://api.github.com/repos/Kiran-Alex/Kiran-Alex', {
-                                        headers: {
-                                            "Accept ": "application/vnd.github+json",
-                                            " Authorization": `Bearer ${gitToken}`,
-                                            "X-GitHub-Api-Version": "2022-11-28"
-                                        }
-                                    })
-
-                                    if (result.status >= 200 && result.status <= 209) {
-                                        toast.success('Successfully Connected , please refresh the page to see the changes!')
-                                        SetGithubStatus(true);
-                                        githubRegAuthToken.mutate(gitToken)
-                                        handlegitOpen()           
-                                    }
-                                }
-                                catch (err) {
-                                    toast.error("Token Might be Wrong or Expired");
-                                    handlegitOpen()
-                                }
-                            }}>
-                                <span>Confirm</span>
-                            </Button>
-                        </DialogFooter>
-                    </Dialog>
-
-                    <button className="w-fit h-fit" onClick={(e) => { { VercelStatus == false && load == true && e.preventDefault() } { VercelStatus !== false && load !== true && e.preventDefault() } { VercelStatus == false && load == false && handleOpen() } }}>
+                    <button className="w-fit h-fit" onClick={(e) => { { VercelStatus == false && load == true && null } { VercelStatus !== false && load !== true && e.preventDefault() } { VercelStatus == false && load == false && handleOpen() } }}>
                         <Card loading={load} image={<svg fill="#000000" className="w-16 h-16" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M256,48,496,464H16Z" /></svg>
                         } title="Vercel" connected={VercelStatus} /></button>
                     <Dialog placeholder={"fr"} open={open} handler={handleOpen}>
@@ -206,7 +196,7 @@ const Integration = () => {
 
                                         toast.success('Successfully Connected')
                                         SetVercelStatus(true);
-
+                                        router.reload()
                                         mutate(token)
                                         handleOpen()
                                     }
