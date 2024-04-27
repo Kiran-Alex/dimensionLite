@@ -30,7 +30,9 @@ const Integration = () => {
     const handleOpen = () => setOpen(!open);
     const [load, setLoad] = useState<boolean>(true)
     const [Gitload, setGitLoad] = useState<boolean>(true)
-    const { mutate, data } = api.integration.TokenRegister.useMutation()
+    const { mutate, data } = api.integration.TokenRegister.useMutation({onSuccess:async()=>{
+        toast.success("Vercel Connected Please Refresh the Page to see the changes!"); await authToken.refetch()
+    }})
     const authToken = api.integration.RetreiveToken.useQuery()
     const githubRetreiveAuthToken = api.integration.GithubRetreiveToken.useQuery()
     const clientId =process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID
