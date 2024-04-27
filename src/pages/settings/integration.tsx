@@ -85,7 +85,7 @@ const Integration = () => {
 
                 try {
                     const Token = githubRetreiveAuthToken.data?.githubAuthToken
-                    const result = await axios.get('https://api.github.com/repos/Kiran-Alex/Kiran-Alex', {
+                    const result = await axios.get('https://api.github.com/repos/facebook/react', {
                         headers: {
                             "Accept ": "application/vnd.github+json",
                             " Authorization": `Bearer ${Token}`,
@@ -152,10 +152,6 @@ const Integration = () => {
             <div className="flex flex-grow pl-5 w-5/5 ">
                 <div style={{ height: "34em" }} className=" mt-8 flex flex-col w-9/12  ">
                     <div className="h-fit w-5/5"><h1 className="text-gray-500 text-xl font-bold">Integrations</h1></div>
-
-
-        
-
 
                     <button className="w-fit h-fit" onClick={(e) => { { GithubStatus == false && Gitload == true && null } { GithubStatus !== false && Gitload !== true && e.preventDefault() } { GithubStatus == false && Gitload == false &&  window.location.assign(`https://github.com/login/oauth/authorize?client_id=${clientId}&scope=repo,user`) } }}>
                         <Card loading={Gitload} image={<svg className="w-16 h-16 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">

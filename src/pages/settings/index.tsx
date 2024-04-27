@@ -50,9 +50,6 @@ const index = () => {
                         <label className="block text-sm text-gray-500 mt-2 dark:text-gray-600">Email</label>
 
                         <input type="text" placeholder={userInfo.data?.info.mail ?? ""} disabled className="block  mt-2 w-full  dark:placeholder-gray-300 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-300  dark:text-gray-300 dark:focus:border-blue-300" />
-
-                       
-
                     </div>
                     <div className="w-5/5 h-fit flex flex-row justify-end"><button className="px-3 py-1 text-sm tracking-wide flex flex-row font-thin text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
                         save&nbsp; <svg className="w-4 h-5 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
