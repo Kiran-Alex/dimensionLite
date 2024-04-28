@@ -11,10 +11,17 @@ const Join: React.FC = () => {
     const [groupfield, SetGroupField] = useState<string>();
     const getgrouponid = api.group.GetGroupOnId.useQuery({ groupId: groupfield! })
     const checkuserindb = api.profile.CheckUserInDb.useQuery()
-    const createuser = api.profile.Create.useMutation()
+    const createuser = api.profile.Create.useMutation({
+        onSuccess: async () => {
+            if (groupfield !== undefined) {
+                JoinGroup.mutate(groupfield)
+                toast.success("successfully joined the group")
+            }
+        }
+    })
 
 
-    
+
 
 
     const handleSubmit = () => {
@@ -33,17 +40,20 @@ const Join: React.FC = () => {
                             if (getgrouponid.data) {
                                 if (checkuserindb.data?.user == false) {
                                     createuser.mutate()
-                                    JoinGroup.mutate(groupfield)
-                                    toast.success("successfully joined the group")
+                                    if (createuser.isSuccess) {
+                                        console.log("453")
+
+                                    }
+
                                 }
                                 else {
-                                   
+
                                     JoinGroup.mutate(groupfield)
                                     toast.success("successfully joined the group")
                                 }
-                                
+
                             }
-                           
+
                         }
                         else {
                             toast.error("Please Check The Code Again")
@@ -78,7 +88,7 @@ const Join: React.FC = () => {
                 <div className="h-8 w-full flex flex-row items-center">
                     Join Team
                 </div>
-                
+
                 <div className="flex flex-grow justify-center items-center">
                     <div className="w-2/4 h-1/4 flex flex-col justify-between  rounded-lg">
                         <div className="flex flex-col">

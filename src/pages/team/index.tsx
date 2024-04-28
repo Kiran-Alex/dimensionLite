@@ -38,7 +38,7 @@ const Index = () => {
     onSuccess: async () => {
 
       if (team !== undefined && team !== "") {
-        console.log("control at team is identified")
+
         const thisGroup = groups.data?.groups?.find((grp) => grp.id === team)
         if (thisGroup?.RepositoryLink !== undefined || thisGroup?.RepositoryLink !== null && retreiveGitToken.data?.githubAuthToken !== null || retreiveGitToken.data?.githubAuthToken !== undefined) {
           const repo = linkParser(thisGroup?.RepositoryLink)
@@ -68,6 +68,7 @@ const Index = () => {
               }
             }
             if(projectTag !== "" && projectType !== ""){
+              try{
               const res: { data: { number: string }, status: number } = await axios.post(`https://api.github.com/repos/${repo.username}/${repo.repository}/issues`, {
                 "title": title,
                 "body": description,
@@ -79,6 +80,7 @@ const Index = () => {
                   "X-GitHub-Api-Version": "2022-11-28",
                 }
               })
+            
   
               if (res.status >= 200 && res.status <= 209) {
                 updateIssueNo.mutate({ issueNo: res.data.number.toString(), taskId: uid })
@@ -89,7 +91,11 @@ const Index = () => {
                 setDate("")
                 setTeam("")
                 setUid("")
+              }}
+              catch(err) {
+                console.log(err)
               }
+
             }
             if(projectTag !== "" && projectType == ""){
               const res: { data: { number: string }, status: number } = await axios.post(`https://api.github.com/repos/${repo.username}/${repo.repository}/issues`, {
@@ -283,7 +289,7 @@ const Index = () => {
         const myDate = new Date(date);
         const uniqueId = uuidv4()
         setUid(uniqueId)
-        todo.mutate({ title, description, date: myDate, teamId: team, id: uniqueId, projectType: projectType, projectTag: projectTag })
+        todo.mutate({ title, description, date: myDate || "", teamId: team, id: uniqueId, projectType: projectType, projectTag: projectTag })
       }
       else {
         toast.error("please enter a title ")
@@ -335,8 +341,6 @@ const Index = () => {
     void latestTodo()
   }, [todo.isSuccess, updateTodo.isSuccess])
 
-
-
   return (
     <div className="flex flex-col w-screen pt-3 px-16 h-screen overflow-auto">
       <div className="flex h-8 w-full flex-row items-center justify-between">
@@ -346,7 +350,7 @@ const Index = () => {
             {getTodos.isFetched ? getTodos.data?.count : 0}
           </div>
         </div>
-       {groups.isFetched && groups.data?.groups!== undefined ?  <Button placeholder={"rf"} onClick={() => { setProjectTag(""); setProjectType(""); handleOpen() }} className="w-30 h-8 bg-black text-white px-3 py-1 text-xs  rounded-md hover:bg-gray-900 mb ">Create Task</Button>:<><Tooltip content="create a team to create task"><Button placeholder={"rf"}  className="w-30 h-8 bg-gray-700 text-white px-3 py-1 text-xs rounded-md  ">Create Task</Button></Tooltip></>}
+       {groups.isFetched && groups.data?.groups!== undefined && groups.data?.groups.length !== 0 ?  <Button placeholder={"rf"} onClick={() => { setProjectTag(""); setProjectType(""); handleOpen() }} className="w-30 h-8 bg-black text-white px-3 py-1 text-xs  rounded-md hover:bg-gray-900 mb ">Create Task</Button>:<><Tooltip content="create a team to create task"><Button placeholder={"rf"}  className="w-30 h-8 bg-gray-700 mb-2 text-white px-3 py-1 text-xs rounded-md  ">Create Task</Button></Tooltip></>}
         <Dialog placeholder={"rf"} open={open} handler={handleOpen}>
           <DialogHeader placeholder={"rf"}><input type="text" onChange={(e) => {
             e.preventDefault()

@@ -1,7 +1,6 @@
 import { postRouter } from "~/server/api/routers/post";
 import { createTRPCRouter } from "~/server/api/trpc";
 import { profileRouter } from "./routers/profile";
-import { pusherRouter } from "./routers/pusher";
 import { openaiRouter } from "./routers/openAI";
 import { IntegrationRouter } from "./routers/integration";
 import { tokenRouter } from "./routers/token";
@@ -15,7 +14,6 @@ import { todoRouter } from "./routers/todo";
 export const appRouter = createTRPCRouter({
   post: postRouter,
   profile : profileRouter,
-  pusher : pusherRouter,
   openAI : openaiRouter,
   integration : IntegrationRouter,
   token : tokenRouter,

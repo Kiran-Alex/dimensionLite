@@ -22,10 +22,15 @@ export default function Home() {
 
         </button> */}
 
-          index
+
+          <div className="h-full w-full">
+          <iframe src="https://www.loom.com/embed/0d7d4466f2514a709152682afde8a2c0?sid=2154d8a7-5100-4122-9e68-82f363f33f65"  allowFullScreen className="w-full h-full"></iframe>
+          </div>
       </Layout>
         
-
+      
+   
+      
 
     </>
   );
