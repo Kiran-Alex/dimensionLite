@@ -342,7 +342,7 @@ const Index = () => {
   }, [todo.isSuccess, updateTodo.isSuccess])
 
   return (
-    <div className="flex flex-col w-screen pt-3 px-16 h-screen overflow-auto">
+    <div className="flex flex-col w-screen pt-3 lg:md:px-16 px-2 h-screen overflow-auto">
       <div className="flex h-8 w-full flex-row items-center justify-between">
         <div className="flex flex-row ">
           <span>My Tasks</span>
@@ -463,7 +463,7 @@ const Index = () => {
                   key={td.id} // Add a unique key to each task
                   className="w-full h-9 bg-gray-100 rounded-md mt-3 py-6 px-2 flex flex-column items-center justify-between my-3 "
                 >
-                  <div className="flex flex-row justify-center items-center ">
+                  <div className="flex flex-row lg:md:justify-center items-center lg:w-fit w-full justify-between  ">
                     <input
                       type="checkbox"
                       className="w-5 h-5 ml-2 z-10"
@@ -480,7 +480,7 @@ const Index = () => {
 
                   </div>
 
-                  <div className="flex flex-row mr-2 font-bold">
+                  <div className="flex flex-row mr-2 font-bold lg:md:block hidden">
                     <span className={`ml-2 ${td.done ? "line-through" : ""}`}>{td.date?.toDateString()}&nbsp;{td.date == null && null}{td.groupid == "" || null && null}{td.date !== null && td.groupid == null && null}{td.date == null && td.groupid == null && null}{td.date !== null && td.groupid !== null && "|"}<span>&nbsp;{GrpName?.name}</span></span>
                   </div>
                 </div>

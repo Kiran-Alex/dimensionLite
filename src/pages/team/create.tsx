@@ -134,7 +134,7 @@ const Create: React.FC = () => {
           Create
         </div>
         <div className="flex flex-grow justify-center items-center">
-          <div className="w-2/4 h-3/4 flex flex-col justify-between  rounded-lg">
+          <div className="lg:md:w-2/4 w-3/4 h-3/4 flex flex-col justify-between  rounded-lg">
             <div className="flex flex-col">
               <label className="block text-sm text-gray-500 dark:text-gray-600">Team Name <span className="text-red-400 align-center font-bold ">*</span></label>
               <input onChange={(e) => { e.preventDefault(); SetteamName(e.target.value) }} type="text" placeholder="Dictator" className="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-300 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-300  dark:text-gray-300 dark:focus:border-blue-300 mb-4" required />

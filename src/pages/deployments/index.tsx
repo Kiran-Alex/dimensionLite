@@ -82,7 +82,7 @@ const Index = () => {
   return (
     <>
 
-      <div className="flex flex-col w-screen pt-3 pb-6 px-16 h-screen ">
+      <div className="flex flex-col w-screen pt-3 pb-6 lg:md:px-16 px-3 h-screen ">
         <style jsx global>{`
       .sidebar-2 {
          display: none ;

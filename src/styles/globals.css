@@ -36,8 +36,9 @@ cord-page-presence .cord-avatar-container {
     }
 
     cord-thread .cord-inline-thread {
-        max-height: 42rem;
+        max-height: 100%;
     }
+    
 
     .sidebar-2 {
 @apply h-screen px-3 pb-8 pt-4 overflow-y-auto bg-white sm:w-64 w-60 
