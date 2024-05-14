@@ -162,7 +162,7 @@ const Integration = () => {
                         } title="Github" connected={GithubStatus} /></button>
       
 
-                    <button className="lg:md:w-fit w-full h-fit" onClick={(e) => { { VercelStatus == false && load == true && null } { VercelStatus !== false && load !== true && e.preventDefault() } { VercelStatus == false && load == false && handleOpen() } }}>
+                    <button className="lg:md:w-fit w-full h-fit " onClick={(e) => { { VercelStatus == false && load == true && null } { VercelStatus !== false && load !== true && e.preventDefault() } { VercelStatus == false && load == false && handleOpen() } }}>
                         <Card loading={load} image={<svg fill="#000000" className="w-16 h-16" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M256,48,496,464H16Z" /></svg>
                         } title="Vercel" connected={VercelStatus} /></button>
                     <Dialog placeholder={"fr"} open={open} handler={handleOpen}>
