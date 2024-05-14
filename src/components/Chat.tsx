@@ -19,7 +19,7 @@ const Chat = () => {
     return (
         <>
             <div className="space-y-1 px-1">
-                <label className="  text-lg">Chat</label>
+                <label className="ml-4  text-lg">Chat</label>
                 {groups.isFetched && groups?.data?.groups?.length == 0 ?
                     <div className="">Please Join or create a team </div> : groups.data?.groups?.map((grp) => {
                         groups.isFetched ? groups.refetch : null
