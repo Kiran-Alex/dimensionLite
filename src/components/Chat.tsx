@@ -2,7 +2,8 @@ import Link from "next/link"
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import { v4 as uuidv4 } from "uuid"
-
+import { useSetRecoilState } from "recoil";
+import { MobileSideBarState } from "store/atoms/MobileSideBarState";
 
 interface datainterface {
     id: string,
@@ -15,6 +16,8 @@ const Chat = () => {
     const router = useRouter()
     const groups = api.profile.getGroups.useQuery()
     const pathname = router.query.id as string
+    const setMobileNavState = useSetRecoilState(MobileSideBarState)
+
 
     return (
         <>
@@ -26,7 +29,7 @@ const Chat = () => {
 
                         return (
                             <>
-                                <Link key={uuidv4()} className={`flex items-center py-1 pl-6 bg-gray-50 text-gray-600 transition-colors duration-300 transform rounded-lg mt-3 dark:text-gray-500 hover:bg-gray-200  hover:text-gray-700 ${pathname == grp.id && "!bg-gray-200"}`} href={`/chat/${grp.id}`}>
+                                <Link key={uuidv4()} onClick={() => setMobileNavState(false)} className={`flex items-center py-1 pl-6 bg-gray-50 text-gray-600 transition-colors duration-300 transform rounded-lg mt-3 dark:text-gray-500 hover:bg-gray-200  hover:text-gray-700 ${pathname == grp.id && "!bg-gray-200"}`} href={`/chat/${grp.id}`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5-3.9 19.5m-2.1-19.5-3.9 19.5" />
                                     </svg>
