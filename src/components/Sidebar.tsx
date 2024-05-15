@@ -52,7 +52,7 @@ const Sidebar = () => {
         <>
             <aside className="flex w-fit">
                 
-                <div className="flex flex-col items-center w-12 h-screen lg:pb-8 pt-4 pb-16 bg-white">
+                <div className="flex flex-col items-center w-12 h-screen lg:pb-8 pt-4 pb-20 bg-white">
                     <nav className="flex flex-col items-center flex-1 space-y-3 ">
                         <Link href="/" onClick={() => { setNavState("index"),setMobileNavState(false) }} className="mb-2">
                             <Image className="w-auto h-6  scale-100" src={logo} alt="" />
