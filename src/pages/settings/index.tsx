@@ -34,8 +34,7 @@ const index = () => {
                 </div>
             </div>
             <div className="flex flex-grow justify-center ">
-                <div style={{ height: "34em" }} className="w-2/5 mt-10 flex flex-col just\
-                 ">
+                <div style={{ height: "34em" }} className="lg:w-2/5 mt-10 flex flex-col ">
                     <div className="h-fit w-5/5"><h1 className="text-gray-500 text-xl font-bold">Profile</h1></div>
                     <div className="flex-grow h-5/5">
                         <div className="w-5/5 flex flex-row justify-center mt-6">

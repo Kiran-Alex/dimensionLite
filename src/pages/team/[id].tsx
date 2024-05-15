@@ -302,7 +302,7 @@ export default function Id() {
     return (
         <>
             <div className="flex flex-row w-screen overflow-y-hidden">
-                <div className="flex flex-col h-screen w-[75%] p-3">
+                <div className="flex flex-col h-screen lg:w-[75%] w-full p-3 ">
                     <div className="h-8 w-full flex flex-row items-center ">
                         <div className="flex items-center pl-3 overflow-x-auto whitespace-nowrap">
                             <Link href="/team" className="text-black dark:text-black hover:underline text-sm pl-2 font-bold">
@@ -321,7 +321,7 @@ export default function Id() {
                             &nbsp;
                         </div>
                     </div>
-                    <div className="flex h-screen flex-col ">
+                    <div className="flex h-screen flex-col lg:block hidden ">
                         <div className=" flex flex-col h-[91%] justify-between  items-center ">
                             <div className="w-full h-[35%] overflow-auto py-3 px-6">
                                 <p className="font-bold text-sm text-gray-400 mb-4">Description :</p>
@@ -401,8 +401,11 @@ export default function Id() {
                                 </Button>
                             </div></div>
                     </div>
+                    <div className='flex flex-col h-screen w-full bg-gray-200 justify-center items-center'>
+                                    <p className='text-sm'>Sorry! This Page works only in large screens.<br/> Please open it in laptop or desktop.<br/> Click Here to   <Link href={"/team"} className="text-black dark:text-black underline text-sm font-bold">Go back</Link></p>
+                    </div>
                 </div>
-                <div className="h-screen w-[25%] border border-l-2 flex flex-col">
+                <div className="h-screen w-[25%] border border-l-2 flex flex-col lg:block hidden">
                     <div className='h-[80%] w-full  flex flex-col justify-around p-3'>
                         {getTodoInfo.isLoading && loadingWithLabel("Todo Status")}
                         {getTodoInfo.isLoading && loadingWithLabel("Team")}
