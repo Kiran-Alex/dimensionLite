@@ -343,7 +343,7 @@ const Index = () => {
 
   return (
     <div className="flex flex-col w-screen pt-3 lg:md:px-16 px-2 h-screen overflow-auto">
-      <div className="flex h-8 w-full flex-row items-center justify-between">
+      <div className="flex h-8 lg:min-w-full min-w-64  flex-row items-center justify-between">
         <div className="flex flex-row ">
           <span>My Tasks</span>
           <div className="h-5/5 ml-4 w-4 rounded-md bg-gray-200 text-center">
@@ -351,17 +351,18 @@ const Index = () => {
           </div>
         </div>
        {groups.isFetched && groups.data?.groups!== undefined && groups.data?.groups.length !== 0 ?  <Button placeholder={"rf"} onClick={() => { setProjectTag(""); setProjectType(""); handleOpen() }} className="w-30 h-8 bg-black text-white px-3 py-1 text-xs  rounded-md hover:bg-gray-900 mb ">Create Task</Button>:<><Tooltip content="create a team to create task"><Button placeholder={"rf"}  className="w-30 h-8 bg-gray-700 mb-2 text-white px-3 py-1 text-xs rounded-md  ">Create Task</Button></Tooltip></>}
-        <Dialog placeholder={"rf"} open={open} handler={handleOpen}>
+      
+        <Dialog placeholder={"rf"} open={open} handler={handleOpen} className="lg:h-fit h-[36rem] ">
           <DialogHeader placeholder={"rf"}><input type="text" onChange={(e) => {
             e.preventDefault()
             setTitle(e.target.value)
           }} className="w-full active:border-0 focus:border-0 outline-none  py-2 rounded pl-2" placeholder="Task title" required /></DialogHeader>
-          <DialogBody className="py-0" placeholder={"rf"}>
+          <DialogBody className="py-0 " placeholder={"rf"}>
             <Textarea label="Description" onChange={(e) => {
               e.preventDefault()
               setDescription(e.target.value)
             }} className="h-36 border  border-none bg-gray-100 outline-none placeholder:text-lg " />
-            <div className="h-10 w-full flex flex-row justify-between items-center">
+            <div className="lg:h-10 h-30 w-full flex lg:flex-row flex-col lg:justify-between justify-around gap-4 items-start lg:items-center">
               {!isLoading ? <><div className="w-24">
 
                 <Select placeholder={"rf"} value={projectType} className=" border-gray-200" onChange={(val) => { setProjectType(val!) }} label="Project">
@@ -417,9 +418,9 @@ const Index = () => {
           </DialogBody>
 
 
-          <div className="flex flex-row justify-between  pb-7 px-3 mt-5 border-t-2 pt-5">
+          <div className="flex lg:flex-row flex-col justify-between  pb-7 px-3 mt-5 border-t-2 pt-5">
 
-            <div className="flex flex-row w-4/5 justify-between">
+            <div className="flex lg:flex-row flex-col w-4/5 gap-3 justify-between">
               <div className="flex flex-row w-2/5 ">
                 <Select size="md" className=" border-gray-200" onChange={(val) => { setTeam(val!) }} placeholder={"rf"} label="team">
 
@@ -429,10 +430,10 @@ const Index = () => {
 
                 </Select>
               </div>
-              <input type="date" onChange={(e) => { e.preventDefault(); setDate(e.target.value) }} className="border border-gray-200 px-1 ml-2 rounded rounded-md" />
+              <input type="date" onChange={(e) => { e.preventDefault(); setDate(e.target.value) }} className="border border-gray-200 w-fit px-1 lg:ml-2 rounded rounded-md" />
             </div>
 
-            <div className="flex flex-row">
+            <div className="flex lg:flex-row flex-col lg:mt-0 mt-2 gap-2">
               <Button
                 placeholder={"rf"}
                 variant="text"
@@ -449,6 +450,8 @@ const Index = () => {
           </div>
 
         </Dialog>
+
+
       </div>
 
       {getTodos.isFetched && getTodos.data?.count === 0 ? <>
