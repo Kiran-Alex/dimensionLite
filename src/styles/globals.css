@@ -44,7 +44,7 @@ cord-page-presence .cord-avatar-container {
     }
 
 
-    @media screen and (max-width: 542px) {
+    @media screen and (max-width: 542px) {  
       cord-thread .cord-inline-thread {
         height :43rem
      }

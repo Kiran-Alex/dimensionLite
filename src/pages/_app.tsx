@@ -40,7 +40,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 
   return (
 
-    <div className="flex flex-row" >
+    <div className="flex flex-row overflow-y-hidden" >
       <RecoilRoot>
         <Toaster
           position="bottom-center"
